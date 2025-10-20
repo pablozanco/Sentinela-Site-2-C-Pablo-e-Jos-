@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinela - Proteção de Redes</title>
+<link rel="stylesheet" href="pablofrontend.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Fundo de partículas -->
+<canvas id="background"></canvas>
+
+<!-- Header -->
+<header>
+  <div class="header-center">
+    <img src="sentinelalogo.jpg" alt="Logo Sentinela" class="logo">
+    <h1 class="site-title">Sentinela</h1>
+  </div>
+  <div class="header-buttons">
+    <button class="scanner-btn">Scanner Online</button>
+    <button class="login-btn">Login</button>
+  </div>
+</header>
+
+<!-- Menu lateral -->
+<aside id="sidebar">
+  <ul>
+    <li><a href="#intro">Sobre Nós</a></li>
+    <li><a href="#pacotes">Pacotes</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#depoimentos">Depoimentos</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</aside>
+
+<!-- Seção introdutória -->
+<section id="intro" class="intro-section animate-slide">
+  <h2>Bem-vindo ao <span>Sentinela</span></h2>
+  <p class="intro-desc">Nós protegemos suas redes de forma avançada, monitorando ameaças e garantindo segurança completa para sua empresa ou residência. Criado por <strong>Pablo & José</strong>.</p>
+  <div class="intro-highlights">
+    <div class="highlight-card"><h3>Monitoramento 24/7</h3><p>Detecta ameaças em tempo real e mantém a rede estável.</p></div>
+    <div class="highlight-card"><h3>Firewall Inteligente</h3><p>Proteção automática contra invasões externas.</p></div>
+    <div class="highlight-card"><h3>Relatórios Detalhados</h3><p>Mostra vulnerabilidades e recomendações práticas.</p></div>
+  </div>
+</section>
+
+<!-- Pacotes -->
+<section id="pacotes" class="packages animate-fade">
+  <h2>Nossos Pacotes</h2>
+  <div class="package-cards">
+    <div class="package-card">
+      <h3>Pacote Básico</h3>
+      <p class="price">R$ 49,90/mês</p>
+      <p>Proteção essencial para pequenas redes e uso residencial.</p>
+      <ul>
+        <li>Monitoramento básico</li>
+        <li>Firewall padrão</li>
+        <li>Relatórios semanais</li>
+      </ul>
+      <button class="buy-btn">Comprar</button>
+    </div>
+    <div class="package-card">
+      <h3>Pacote Profissional</h3>
+      <p class="price">R$ 99,90/mês</p>
+      <p>Ideal para pequenas empresas, segurança reforçada e alertas avançados.</p>
+      <ul>
+        <li>Monitoramento completo</li>
+        <li>Firewall inteligente</li>
+        <li>Relatórios detalhados</li>
+        <li>Suporte prioritário</li>
+      </ul>
+      <button class="buy-btn">Comprar</button>
+    </div>
+    <div class="package-card">
+      <h3>Pacote Empresarial</h3>
+      <p class="price">R$ 199,90/mês</p>
+      <p>Segurança máxima para empresas de médio e grande porte.</p>
+      <ul>
+        <li>Monitoramento avançado 24/7</li>
+        <li>Firewall inteligente com AI</li>
+        <li>Relatórios detalhados e gráficos</li>
+        <li>Consultoria especializada</li>
+        <li>Suporte prioritário 24h</li>
+      </ul>
+      <button class="buy-btn">Comprar</button>
+    </div>
+  </div>
+</section>
+
+<!-- Serviços -->
+<section id="servicos" class="services animate-slide">
+  <h2>Serviços Complementares</h2>
+  <div class="cards">
+    <div class="card"><img src="monitoramento.png" alt="Monitoramento"><h3>Monitoramento 24/7</h3><p>Monitoramento contínuo para evitar falhas e ataques.</p></div>
+    <div class="card"><img src="firewall.png" alt="Firewall"><h3>Firewalls Inteligentes</h3><p>Controle de acesso e proteção contra intrusos.</p></div>
+    <div class="card"><img src="relatórios.png"Relatórios"><h3>Relatórios Detalhados</h3><p>Dados completos sobre vulnerabilidades e melhorias.</p></div>
+    <div class="card"><img src="consultoria.png" alt="Consultoria"><h3>Consultoria Personalizada</h3><p>Planos estratégicos adaptados à sua rede.</p></div>
+  </div>
+</section>
+
+<!-- Depoimentos -->
+<section id="depoimentos" class="depoimentos animate-fade">
+  <h2>O que nossos clientes dizem</h2>
+  <div class="depo-cards">
+    <div class="depo-card">
+      <img src="ricksanchez.jfif" alt="Rick Sanchez">
+      <p>"O Sentinela salvou nossa rede! Monitoramento e suporte incríveis."</p>
+      <span>❤️ 124 curtidas</span>
+    </div>
+    <div class="depo-card">
+      <img src="mortysmith.jfif" alt="Morty Smith">
+      <p>"Serviço profissional, pacotes completos e interface intuitiva."</p>
+      <span>❤️ 98 curtidas</span>
+    </div>
+    <div class="depo-card">
+      <img src="senhorbundacagada.jfif" alt="Senhor Bunda Cagada">
+      <p>"Recomendo para empresas que precisam de segurança de verdade."</p>
+      <span>❤️ 176 curtidas</span>
+    </div>
+  </div>
+</section>
+
+<!-- Contato -->
+<section id="contato" class="contact animate-slide">
+  <h2>Entre em Contato</h2>
+  <p>Para mais informações ou dúvidas, entre em contato com nossa equipe.</p>
+  <form>
+    <input type="text" placeholder="Nome" required>
+    <input type="email" placeholder="Email" required>
+    <textarea placeholder="Mensagem" required></textarea>
+    <button type="submit">Enviar</button>
+  </form>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-socials">
+    <a href="#"><img src="logoinstagram.png" alt="Instagram"></a>
+    <a href="#"><img src="logofacebook.png" alt="Facebook"></a>
+    <a href="#"><img src="logotwitter.png" alt="Twitter"></a>
+  </div>
+  <p>&copy; Sentinela • Painel de segurança — Desenvolvido por Pablo & José</p>
+</footer>
+
+<script src="pablofrontend.js" defer></script>
+</body>
+</html>

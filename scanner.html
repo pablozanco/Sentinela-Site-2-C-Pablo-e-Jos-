@@ -35,7 +35,6 @@
   .header-actions a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
   .header-actions .primary{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#111;border:none;box-shadow:0 8px 30px rgba(255,215,0,0.08)}
 
-  /* App layout */
   .app {
     position:relative; padding:110px 36px 36px 36px;
     display:grid; grid-template-columns: 360px 1fr 360px; gap:20px;
@@ -50,7 +49,6 @@
   .tool{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;color:var(--muted);cursor:pointer}
   .tool:hover{background:var(--glass);color:#fff}
 
-  /* center scanner */
   .center{display:flex;flex-direction:column;gap:14px}
   .scanner-card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.02)}
   .scanner-head{display:flex;justify-content:space-between;align-items:center}
@@ -108,10 +106,8 @@
 </head>
 <body>
 
-  <!-- background canvas -->
   <canvas id="bg" style="position:fixed;inset:0;z-index:0;"></canvas>
 
-  <!-- Header -->
   <header>
     <div class="brand">
       <img src="sentinelalogo.jpg" alt="logo" onerror="this.style.display='none'">
@@ -129,10 +125,8 @@
     </div>
   </header>
 
-  <!-- App -->
   <div class="app" role="application">
 
-    <!-- left -->
     <div class="panel">
       <h4>Ferramentas</h4>
       <div class="tool" id="toolQuick">▶ Verificação Rápida</div>
@@ -160,7 +154,6 @@
       <div style="font-size:13px;color:var(--muted)"><strong>Versão</strong><br>1.0 • Beta</div>
     </div>
 
-    <!-- center -->
     <div class="center">
       <div class="scanner-card">
         <div class="scanner-head">
@@ -225,7 +218,6 @@
       </div>
     </div>
 
-    <!-- right -->
     <div>
       <div class="panel">
         <h4>Indicadores</h4>
@@ -247,13 +239,11 @@
   </div>
 
 <script>
-/* ========= Sentinela Scanner - Operações ========= */
 (function(){
   // utils
   const rand = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;
   const $ = id => document.getElementById(id);
 
-  // Elements
   const radar = $('radar'), startBtn = $('startBtn'), stopBtn = $('stopBtn'), resetBtn = $('resetBtn');
   const progressFill = $('progressFill'), progressCenter = $('progressCenter'), percentLabel = $('percentLabel');
   const deviceCount = $('deviceCount'), netSpeed = $('netSpeed'), threatCount = $('threatCount');
@@ -263,10 +253,8 @@
   const toolQuick = $('toolQuick'), toolFull = $('toolFull'), toolAlert = $('toolAlert'), toolExport = $('toolExport');
   const liveSwitch = $('liveSwitch') || null, liveKnob = $('liveKnob') || null;
 
-  // state
   let scanning = false, progress = 0, scanTimer = null, currentMode = 'manual';
 
-  // virus bank
   const virusBank = [
     {nome:'Trojan.Win32',nivel:'detected'},
     {nome:'Adware.Generic',nivel:'warning'},
@@ -282,7 +270,6 @@
     {nome:'Cleaner.Temp',nivel:'safe'}
   ];
 
-  // logs
   function pushLog(msg){
     const t = new Date().toLocaleTimeString();
     const div = document.createElement('div');
@@ -292,7 +279,6 @@
     if(logsContainer.childElementCount > 400) logsContainer.removeChild(logsContainer.lastChild);
   }
 
-  // radar blips
   function spawnBlip(){
     const node = document.createElement('div');
     node.className = 'blip';
@@ -304,14 +290,12 @@
     setTimeout(()=> { node.style.transition='opacity 1.2s'; node.style.opacity = 0; setTimeout(()=> node.remove(),1200); }, 2200 + rand(0,1400));
   }
 
-  // pick 4 virus
   function pickViruses(){
     const copy = [...virusBank]; const out = [];
     for(let i=0;i<4;i++){ const idx = rand(0, copy.length-1); out.push(copy.splice(idx,1)[0]); }
     return out;
   }
 
-  // show results
   function showResults(){
     resultList.innerHTML = '';
     const chosen = pickViruses(); let detected = 0;
@@ -326,7 +310,6 @@
     pushLog('Resultados: ' + chosen.map(s=>s.nome+'('+s.nivel+')').join(', '));
   }
 
-  // indicators simulation
   function updateIndicators(){
     cpuVal.textContent = rand(5,70) + '%';
     ramVal.textContent = rand(18,88) + '%';
@@ -335,14 +318,12 @@
   }
   setInterval(updateIndicators, 2500);
 
-  // progress setter
   function setProgress(p){
     progressFill.style.width = p + '%';
     progressCenter.textContent = p + '%';
     percentLabel.textContent = p + '%';
   }
 
-  // start scan
   function startScan(mode='quick'){
     if(scanning) return;
     scanning = true; currentMode = mode; progress = 0;
@@ -352,7 +333,6 @@
     pushLog(`Iniciando varredura (${mode === 'quick' ? 'Rápida' : 'Completa'})`);
     $('statusLabel').textContent = 'Executando';
 
-    // spawn initial blips
     for(let i=0;i<5;i++) setTimeout(spawnBlip, i*260);
 
     const stepMin = mode === 'quick' ? 6 : 3;
@@ -408,12 +388,10 @@
     netSpeed.textContent = '0 Mbps';
   }
 
-  // UI bindings
   startBtn.addEventListener('click', ()=> startScan('quick'));
   stopBtn.addEventListener('click', stopScan);
   resetBtn.addEventListener('click', resetScan);
 
-  // header buttons
   btnQuick.addEventListener('click', ()=> startScan('quick'));
   btnFull.addEventListener('click', ()=> startScan('full'));
 
@@ -436,12 +414,10 @@
     const a = document.createElement('a'); a.href = url; a.download = 'sentinela_report.txt'; a.click(); URL.revokeObjectURL(url);
   });
 
-  // toggle detailed
   btnToggleDetail.addEventListener('click', ()=>{
     const btn = btnToggleDetail;
     const isShown = btn.dataset.shown === '1';
     if(isShown){
-      // hide (we'll just set label and status)
       btn.textContent = 'Mostrar Detalhes';
       btn.dataset.shown = '0';
       $('statusLabel').textContent = scanning ? 'Executando' : 'Pronto';
@@ -454,7 +430,6 @@
     }
   });
 
-  // live switch (if exists)
   if(liveSwitch){
     liveSwitch.addEventListener('click', ()=>{
       if(liveKnob.style.transform === 'translateX(18px)'){
@@ -467,7 +442,6 @@
     });
   }
 
-  // background canvas: particles + lines
   const bg = document.getElementById('bg'), ctx = bg.getContext('2d');
   function fit(){ bg.width = window.innerWidth; bg.height = window.innerHeight; }
   fit(); window.addEventListener('resize', fit);
@@ -506,8 +480,6 @@
     requestAnimationFrame(animate);
   }
   animate();
-
-  // initial logs
   pushLog('Sentinela carregado');
   pushLog('Pronto para verificar');
 })();
@@ -515,3 +487,4 @@
 
 </body>
 </html>
+

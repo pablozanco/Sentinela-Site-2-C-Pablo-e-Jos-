@@ -45,10 +45,6 @@ scannerBtn.addEventListener("click", () => {
   window.location.href = "scanner.html";
 });
 
-loginBtn.addEventListener("click", () => {
-  window.location.href = "login.html";
-});
-
 window.addEventListener("load", () => {
   const animateCards = cards => {
     cards.forEach((c, i) => {
@@ -77,3 +73,4 @@ depoCards.forEach(card => {
     }, 300);
   });
 });
+

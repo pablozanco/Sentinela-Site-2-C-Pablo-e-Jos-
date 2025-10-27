@@ -1,10 +1,8 @@
-// ===== Elementos =====
 const canvas = document.getElementById("background");
 const ctx = canvas.getContext("2d");
 const scannerBtn = document.querySelector(".scanner-btn");
 const loginBtn = document.querySelector(".login-btn");
 
-// ===== Fundo de partículas =====
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = Math.max(window.innerHeight, document.body.scrollHeight);
@@ -40,17 +38,10 @@ function animateParticles() {
 }
 animateParticles();
 
-// ===== Scanner Online =====
 scannerBtn.addEventListener("click", () => {
     window.location.href = "scanner.html";
 });
 
-// ===== Login simples =====
-loginBtn.addEventListener("click", () => {
-    alert("Função de login ainda não implementada.");
-});
-
-// ===== Animação dos cards =====
 window.addEventListener("load", () => {
     const animateCards = cards => {
         cards.forEach((c, i) => {
@@ -69,7 +60,6 @@ window.addEventListener("load", () => {
     animateCards(document.querySelectorAll(".depo-card"));
 });
 
-// ===== Comentários interativos =====
 const depoCards = document.querySelectorAll(".depo-card");
 depoCards.forEach(card => {
     card.addEventListener("click", () => {
@@ -79,3 +69,4 @@ depoCards.forEach(card => {
         }, 300);
     });
 });
+

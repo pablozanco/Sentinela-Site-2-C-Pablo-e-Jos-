@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinela - Login Corporativo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Orbitron:wght@700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:radial-gradient(circle at center,#0a0a0f 0%,#000 100%);height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;color:#fff;}
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+.top-bar{
+  width:100%; display:flex; align-items:center; justify-content:center; gap:15px; margin-top:20px; z-index:2; position:relative;
+}
+.top-bar img{width:90px; filter: drop-shadow(0 0 15px #ffd700); animation: glow 2s infinite alternate;}
+.top-bar h1{font-family:'Orbitron',sans-serif; font-size:2.8rem; color:#ffd700; text-shadow:0 0 25px #ffcc00;}
+
+.container{
+  position: relative; z-index:2; display:flex; width:1050px; height:650px; margin-top:30px;
+  background: rgba(20,20,20,0.9); border-radius:20px; box-shadow:0 0 50px rgba(255,215,0,0.35); overflow:hidden; backdrop-filter: blur(12px);
+}
+
+.left-panel{
+  width:45%; background: rgba(255,215,0,0.05); position:relative; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:30px; border-right:2px solid rgba(255,215,0,0.25);
+}
+.left-panel::before{
+  content:""; position:absolute; top:0; left:0; width:100%; height:100%;
+  background: linear-gradient(120deg, rgba(255,215,0,0.03), transparent 70%); pointer-events:none;
+}
+.left-panel h2{color:#ffd700; font-size:1.7rem; margin-bottom:15px; text-shadow:0 0 10px #ffcc00; text-align:center;}
+.left-panel p{color:#ccc; font-size:0.85rem; text-align:center; line-height:1.4rem;}
+
+.mini-scanner{
+  position:absolute; width:4px; height:120px; background:linear-gradient(to bottom, transparent, #ffd700, transparent);
+  animation:scan 2s linear infinite;
+}
+.mini-scanner:nth-child(1){ left:8%; animation-delay:0s;}
+.mini-scanner:nth-child(2){ left:20%; animation-delay:0.4s;}
+.mini-scanner:nth-child(3){ left:35%; animation-delay:0.8s;}
+.mini-scanner:nth-child(4){ left:50%; animation-delay:1.2s;}
+.mini-scanner:nth-child(5){ left:65%; animation-delay:1.6s;}
+.mini-scanner:nth-child(6){ left:80%; animation-delay:2s;}
+.mini-scanner:nth-child(7){ left:92%; animation-delay:2.4s;}
+
+@keyframes scan{0%{top:0}100%{top:calc(100% - 120px)}}
+
+.right-panel{
+  width:55%; padding:60px 70px; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background: rgba(255,215,0,0.02); border-radius:15px; box-shadow:0 0 15px rgba(255,215,0,0.2) inset;
+}
+.input-group{position:relative; margin-bottom:28px; width:100%;}
+.input-group input{
+  width:100%; padding:20px; border:none; border-bottom:2px solid #ffd700; background:transparent; color:#fff;
+  outline:none; font-size:1.2rem; transition:0.3s; box-shadow:0 0 10px rgba(255,215,0,0.1) inset;
+}
+.input-group label{
+  position:absolute; top:20px; left:0; color:#aaa; transition:0.3s; pointer-events:none;
+}
+.input-group input:focus + label,
+.input-group input:valid + label{top:-12px; font-size:0.9rem; color:#ffd700; text-shadow:0 0 5px #ffea00;}
+
+.btn{
+  width:100%; background:#ffd700; color:#111; font-weight:600; border:none; padding:20px; border-radius:10px;
+  cursor:pointer; font-size:1.2rem; letter-spacing:1px; transition:0.3s; box-shadow:0 0 35px rgba(255,215,0,0.5); margin-top:12px;
+}
+.btn:hover{background:#ffcc00; box-shadow:0 0 50px rgba(255,215,0,0.7); transform:scale(1.05);}
+.erro{color:#ff5555; margin-top:10px; height:22px; font-size:0.95rem; text-align:center;}
+
+.social{display:flex; justify-content:center; gap:18px; margin-top:30px;}
+.social img{width:50px;height:50px;border-radius:50%;transition:0.3s; box-shadow:0 0 15px rgba(255,215,0,0.3); cursor:pointer;}
+.social img:hover{transform:scale(1.15); box-shadow:0 0 25px rgba(255,215,0,0.6);}
+
+.register{margin-top:28px; color:#ffd700; font-weight:500; cursor:pointer; transition:0.3s; text-align:center;}
+.register:hover{text-shadow:0 0 15px #ffcc00;}
+
+@keyframes glow{from{filter:drop-shadow(0 0 5px #ffd700)}to{filter:drop-shadow(0 0 25px #ffea00);}}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="top-bar">
+  <img src="logosentinela10.png" alt="Logo Sentinela">
+  <h1>SENTINELA</h1>
+</div>
+
+<div class="container">
+  <div class="left-panel">
+    <h2>Bem-vindo ao núcleo corporativo</h2>
+    <p>Preencha todos os campos obrigatórios para acessar nosso sistema de cibersegurança.</p>
+    <div class="mini-scanner"></div>
+    <div class="mini-scanner"></div>
+    <div class="mini-scanner"></div>
+    <div class="mini-scanner"></div>
+    <div class="mini-scanner"></div>
+    <div class="mini-scanner"></div>
+    <div class="mini-scanner"></div>
+  </div>
+
+  <div class="right-panel">
+    <form id="loginForm" autocomplete="off">
+      <div class="input-group">
+        <input type="text" id="usuario" required>
+        <label for="usuario">Usuário</label>
+      </div>
+      <div class="input-group">
+        <input type="email" id="email" required>
+        <label for="email">Email</label>
+      </div>
+      <div class="input-group">
+        <input type="password" id="senha" required>
+        <label for="senha">Senha</label>
+      </div>
+      <div class="input-group">
+        <input type="tel" id="telefone" required pattern="[0-9]{10,11}">
+        <label for="telefone">Número de telefone</label>
+      </div>
+      <button type="submit" class="btn">Acessar</button>
+      <p id="erro" class="erro"></p>
+    </form>
+
+    <div class="social">
+      <img src="logogoogle.png" alt="Google">
+      <img src="logofacebook.png" alt="Facebook">
+      <img src="logoinstagram.png" alt="Instagram">
+    </div>
+
+    <div class="register">Registrar</div>
+  </div>
+</div>
+
+<script>
+const canvas=document.getElementById('bg');
+const ctx=canvas.getContext('2d');
+canvas.width=innerWidth; canvas.height=innerHeight;
+
+let lines=[],particles=[],circuits=[];
+for(let i=0;i<30;i++){lines.push({y:Math.random()*canvas.height,speed:1+Math.random()*2});}
+for(let i=0;i<100;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5});}
+for(let i=0;i<50;i++){circuits.push({x1:Math.random()*canvas.width,y1:Math.random()*canvas.height,x2:Math.random()*canvas.width,y2:Math.random()*canvas.height});}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let l of lines){ctx.fillStyle='rgba(255,215,0,0.08)';ctx.fillRect(0,l.y,canvas.width,2);l.y+=l.speed;if(l.y>canvas.height)l.y=0;}
+  for(let p of particles){ctx.fillStyle='rgba(255,215,0,0.15)';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();p.x+=p.dx;p.y+=p.dy;if(p.x>canvas.width)p.x=0;if(p.x<0)p.x=canvas.width;if(p.y>canvas.height)p.y=0;if(p.y<0)p.y=canvas.height;}
+  ctx.strokeStyle='rgba(255,215,0,0.06)'; ctx.lineWidth=1;
+  for(let c of circuits){ctx.beginPath();ctx.moveTo(c.x1,c.y1);ctx.lineTo(c.x2,c.y2);ctx.stroke();}
+  requestAnimationFrame(draw);
+}
+draw();
+
+const form=document.getElementById('loginForm');
+const erro=document.getElementById('erro');
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  const user=document.getElementById('usuario').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const pass=document.getElementById('senha').value.trim();
+  const tel=document.getElementById('telefone').value.trim();
+  if(!user||!email||!pass||!tel){erro.textContent='Todos os campos são obrigatórios.';return;}
+  if(user==='admin' && email==='admin@sentinela.com' && pass==='1234' && tel==='1234567890'){
+    erro.textContent='';form.querySelector('.btn').textContent='Acessando...';form.querySelector('.btn').disabled=true;
+    setTimeout(()=>{alert('Acesso concedido ao sistema corporativo!');},1200);
+  }else{erro.textContent='Acesso negado. Verifique as credenciais.';}
+});
+
+window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
+</script>
+</body>
+</html>

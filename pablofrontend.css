@@ -4,12 +4,12 @@
   box-sizing: border-box;
 }
 
-body, html {
+html, body {
   font-family: 'Poppins', sans-serif;
   color: #f5f5f5;
   overflow-x: hidden;
-  position: relative;
   background: #0d0d0d;
+  position: relative;
   z-index: 1;
 }
 
@@ -31,7 +31,7 @@ header {
   background: #111;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 900;
   border-bottom: 1px solid #FFD700;
 }
 
@@ -39,7 +39,6 @@ header {
   display: flex;
   align-items: center;
   gap: 15px;
-  z-index: 1001;
 }
 
 .header-center .logo {
@@ -66,7 +65,6 @@ header {
   right: 30px;
   display: flex;
   gap: 10px;
-  z-index: 1001;
 }
 
 .login-btn, .scanner-btn {
@@ -87,23 +85,41 @@ header {
   transform: scale(1.05);
 }
 
+/* Sidebar fixa e ajustada */
 #sidebar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 220px;
-  background: #111;
+  width: 240px;
   height: 100vh;
-  padding-top: 80px;
-  z-index: 9999;
+  background: #111;
+  padding-top: 100px;
+  z-index: 1000;
   border-right: 1px solid #FFD700;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #FFD700 #111;
+}
+
+#sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+  background-color: #FFD700;
+  border-radius: 10px;
 }
 
 #sidebar ul {
   list-style: none;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  padding: 0 10px;
 }
 
 #sidebar li a {
@@ -123,6 +139,7 @@ header {
   transform: scale(1.05);
 }
 
+/* Fundo */
 #background {
   position: fixed;
   top: 0;
@@ -134,6 +151,7 @@ header {
   background: radial-gradient(circle, #0d0d0d 0%, #000 100%);
 }
 
+/* Seções gerais */
 .intro-section, .packages, .services, .depoimentos, .contact, footer {
   margin-left: 240px;
   padding: 80px 40px;
@@ -154,7 +172,12 @@ header {
   line-height: 1.6;
 }
 
-.intro-highlights, .package-cards, .services .cards, .depo-cards {
+/* Seção Bem-vindo */
+.intro-section {
+  background: linear-gradient(180deg, #111 0%, #0d0d0d 100%);
+}
+
+.intro-highlights {
   display: flex;
   justify-content: center;
   gap: 25px;
@@ -162,22 +185,59 @@ header {
   margin-top: 30px;
 }
 
-.highlight-card, .package-card, .card, .depo-card {
+.highlight-card {
   background: #1a1a1a;
   padding: 20px;
   border-radius: 15px;
-  width: 250px;
+  width: 260px;
   box-shadow: 0 0 12px #FFD700;
   transition: 0.5s;
 }
 
-.highlight-card:hover, .package-card:hover, .card:hover, .depo-card:hover {
+.highlight-card img {
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px #FFD700;
+}
+
+.highlight-card:hover {
   transform: translateY(-8px) scale(1.05);
   box-shadow: 0 0 25px #FFD700, 0 0 15px #fff;
 }
 
-.package-card h3, .card img {
+/* Pacotes */
+.packages {
+  background: #0d0d0d;
+}
+
+.package-cards {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.package-card {
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 15px;
+  width: 260px;
+  box-shadow: 0 0 12px #FFD700;
+  transition: 0.5s;
+}
+
+.package-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 0 25px #FFD700, 0 0 15px #fff;
+}
+
+.package-card h3 {
   margin-bottom: 15px;
+  color: #FFD700;
 }
 
 .package-card .price {
@@ -187,7 +247,7 @@ header {
   color: #FF8C00;
 }
 
-.package-card ul, .services .cards ul {
+.package-card ul {
   list-style: disc inside;
   margin-bottom: 15px;
   text-align: left;
@@ -195,7 +255,7 @@ header {
   color: #ccc;
 }
 
-.package-card button.buy-btn, .contact button {
+.package-card button.buy-btn {
   background: #FFD700;
   border: none;
   padding: 12px 25px;
@@ -205,12 +265,13 @@ header {
   transition: 0.3s;
 }
 
-.package-card button.buy-btn:hover, .contact button:hover {
+.package-card button.buy-btn:hover {
   background: #FF8C00;
   box-shadow: 0 0 25px #FFD700, 0 0 12px #fff;
   transform: scale(1.05);
 }
 
+/* Serviços complementares com imagens corrigidas */
 .services {
   background: #0f0f0f;
   padding: 100px 40px;
@@ -236,21 +297,16 @@ header {
   padding: 20px;
   box-shadow: 0 0 12px #FFD700;
   transition: 0.4s;
-  max-width: 300px;
+  max-width: 320px;
 }
 
 .services .card img {
   width: 100%;
   height: 180px;
-  object-fit: cover;
   border-radius: 10px;
+  object-fit: cover;
   margin-bottom: 15px;
   box-shadow: 0 0 10px #FFD700;
-}
-
-.services .card:hover {
-  transform: translateY(-10px) scale(1.05);
-  box-shadow: 0 0 25px #FFD700, 0 0 10px #fff;
 }
 
 .services .card h3 {
@@ -262,9 +318,53 @@ header {
 .services .card p {
   color: #ccc;
   line-height: 1.6;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
 }
 
+.services .card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 0 25px #FFD700, 0 0 10px #fff;
+}
+
+/* Depoimentos */
+.depoimentos {
+  background: #111;
+  padding: 100px 40px;
+}
+
+.depo-cards {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.depo-card {
+  background: #1a1a1a;
+  border-radius: 15px;
+  padding: 20px;
+  width: 280px;
+  box-shadow: 0 0 12px #FFD700;
+  transition: 0.5s;
+}
+
+.depo-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 0 25px #FFD700, 0 0 15px #fff;
+}
+
+.depo-card h3 {
+  color: #FFD700;
+  margin-bottom: 10px;
+}
+
+.depo-card span {
+  font-size: 1rem;
+  color: #ccc;
+}
+
+/* Contato ajustado */
 .contact {
   background: linear-gradient(180deg, #111 0%, #000 100%);
   padding: 100px 40px;
@@ -332,6 +432,7 @@ header {
   box-shadow: 0 0 20px #FFD700, 0 0 10px #fff;
 }
 
+/* Rodapé */
 footer {
   margin-left: 240px;
   text-align: center;
@@ -360,6 +461,7 @@ footer {
   box-shadow: 0 0 15px #FFD700;
 }
 
+/* Animações */
 .animate-slide {
   opacity: 0;
   transform: translateY(20px);
@@ -383,3 +485,42 @@ footer {
     opacity: 1;
   }
 }
+
+@media (max-width: 900px) {
+  #sidebar {
+    width: 180px;
+  }
+
+  .intro-section, .packages, .services, .depoimentos, .contact, footer {
+    margin-left: 180px;
+    padding: 60px 25px;
+  }
+
+  .site-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 700px) {
+  #sidebar {
+    display: none;
+  }
+
+  .intro-section, .packages, .services, .depoimentos, .contact, footer {
+    margin-left: 0;
+    padding: 60px 20px;
+  }
+
+  header {
+    justify-content: space-between;
+  }
+
+  .site-title {
+    font-size: 1.8rem;
+  }
+
+  .services .cards {
+    grid-template-columns: 1fr;
+  }
+}
+

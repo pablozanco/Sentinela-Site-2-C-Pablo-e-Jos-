@@ -1,355 +1,153 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sentinela • Scanner Avançado</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scanner Avançado • Sentinela</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
-body{font-family:'Poppins',sans-serif;background:#070709;color:#eaeaea;overflow-y:auto}
-a{color:inherit;text-decoration:none}
-header{position:fixed;left:0;right:0;top:0;height:76px;background:linear-gradient(180deg,#0e0e10,#0b0b0b);display:flex;align-items:center;z-index:1200;border-bottom:1px solid rgba(255,215,0,0.06)}
-.header-left{display:flex;align-items:center;gap:14px;margin-left:20px}
-.logo{height:56px;width:56px;border-radius:10px;object-fit:cover;box-shadow:0 6px 30px rgba(255,215,0,0.06)}
-.site-title{font-family:'Roboto Mono',monospace;font-weight:700;color:#FFD700;font-size:1.5rem;text-shadow:0 0 12px rgba(255,215,0,0.12)}
-.header-actions{margin-left:auto;margin-right:20px;display:flex;gap:10px;align-items:center}
-.btn{background:#111;border:1px solid rgba(255,215,0,0.06);padding:9px 14px;border-radius:10px;color:#ffd700;font-weight:700;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:8px}
-.btn:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(255,215,0,0.04)}
-.primary{background:linear-gradient(90deg,#FFD700,#FF8C00);color:#111;border:none;box-shadow:0 10px 40px rgba(255,215,0,0.08)}
-.container{max-width:1200px;margin:110px auto 60px;padding:0 20px;display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start}
-.left-col{display:flex;flex-direction:column;gap:22px}
-.card{background:linear-gradient(180deg,#0f0f11,#0a0a0b);border-radius:14px;padding:18px;border:1px solid rgba(255,215,0,0.04);box-shadow:0 12px 40px rgba(0,0,0,0.6)}
-.hero{padding:22px;border-radius:12px;position:relative;overflow:hidden;background:linear-gradient(180deg,#0b0b0d,#070708);display:flex;flex-direction:column;gap:12px}
-.hero h1{font-family:'Roboto Mono',monospace;font-size:1.6rem;color:#FFD700}
-.hero p{color:#cfcfcf;font-size:0.98rem;line-height:1.5}
-.hero .quick-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-.features{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
-.feature{background:rgba(255,255,255,0.02);padding:10px 12px;border-radius:10px;min-width:160px}
-.feature h4{font-size:0.95rem;color:#ffd700;margin-bottom:6px}
-.feature p{font-size:0.85rem;color:#cfcfcf}
-.scanner-panel{padding:18px;border-radius:12px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:visible}
-.top-stats{display:flex;gap:10px;flex-wrap:wrap}
-.stat{background:linear-gradient(180deg,rgba(255,215,0,0.03),rgba(255,215,0,0.01));padding:10px;border-radius:10px;min-width:110px;display:flex;flex-direction:column}
-.stat small{color:#bfbfbf;font-size:0.8rem}
-.stat strong{font-family:'Roboto Mono',monospace;color:#ffd700;font-size:1.05rem;margin-top:6px}
-.controls{display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap}
-.scan-progress{height:48px;background:#09090a;border-radius:12px;border:1px solid rgba(255,215,0,0.04);position:relative;overflow:visible;box-shadow:inset 0 0 18px rgba(0,0,0,0.6)}
-.scan-bar{height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff8c00,#ff4c4c);border-radius:12px;transition:width .22s linear;box-shadow:0 6px 40px rgba(255,215,0,0.04)}
-.scan-percent{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-weight:800;color:#0b0b0b;background:rgba(255,255,255,0.92);padding:6px 10px;border-radius:10px;z-index:20;min-width:56px;text-align:center}
-.controls .mode{padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,215,0,0.03);cursor:pointer}
-.scan-loader{width:44px;height:44px;border-radius:50%;border:5px solid rgba(255,255,255,0.03);border-top:5px solid #ffd700;animation:spin 1s linear infinite;display:none;margin-left:6px}
-@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-.scan-info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.scan-info p{font-size:0.95rem;color:#d3d3d3}
-.scan-results{margin-top:10px;list-style:none;padding:0}
-.scan-results li{padding:10px 12px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.02);font-weight:700}
-.scan-results li .tag{padding:6px 8px;border-radius:8px;font-size:0.82rem}
-.scan-results li.detected{background:linear-gradient(90deg,rgba(255,76,76,0.12),rgba(255,76,76,0.03))}
-.scan-results li.detected .tag{background:#ff4c4c;color:#fff}
-.scan-results li.warning{background:linear-gradient(90deg,rgba(255,140,0,0.08),rgba(255,140,0,0.03))}
-.scan-results li.warning .tag{background:#ff8c00;color:#111}
-.scan-results li.safe{background:linear-gradient(90deg,rgba(255,215,0,0.08),rgba(255,215,0,0.03))}
-.scan-results li.safe .tag{background:#ffd700;color:#111}
-.right-col{display:flex;flex-direction:column;gap:16px}
-.panel{padding:14px;border-radius:12px;min-height:80px}
-.log-box{background:linear-gradient(180deg,#0b0b0d,#080808);padding:14px;border-radius:12px;overflow:auto;max-height:360px;border:1px solid rgba(255,215,0,0.03)}
-.log-entry{font-family:'Roboto Mono',monospace;font-size:0.85rem;color:#cfcfcf;padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(255,255,255,0.01)}
-.controls-advanced{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.device-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-.device{background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
-.footer-note{color:#9b9b9b;font-size:0.88rem;margin-top:6px}
-.center-stage{position:relative}
-.center-glow{position:absolute;right:-40px;top:-40px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,0,0.06),transparent 40%);filter:blur(34px);pointer-events:none}
-.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.legend .item{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02)}
-.legend .dot{width:12px;height:12px;border-radius:50%}
-.legend .safe .dot{background:#ffd700}
-.legend .warn .dot{background:#ff8c00}
-.legend .det .dot{background:#ff4c4c}
-.mode-badges{display:flex;gap:8px;align-items:center}
-.details-panel{margin-top:8px;background:linear-gradient(180deg,#0c0c0d,#070707);padding:12px;border-radius:10px;border:1px solid rgba(255,215,0,0.03)}
-.large-btn{padding:12px 18px;border-radius:10px;border:none;background:linear-gradient(90deg,#ffd700,#ff8c00);font-weight:800;color:#080808;cursor:pointer}
-.small-muted{font-size:0.85rem;color:#bdbdbd}
-@media(max-width:1100px){.container{grid-template-columns:1fr 360px}.scan-info{grid-template-columns:1fr}.scan-progress{height:44px}}
-@media(max-width:880px){.container{grid-template-columns:1fr}.right-col{order:2}.left-col{order:1}}
+*{margin:0;padding:0;box-sizing:border-box;}
+body,html{font-family:'Poppins',sans-serif;color:#f5f5f5;overflow-x:hidden;position:relative;background:#0d0d0d;}
+h1,h2,h3,h4{font-family:'Roboto Mono',monospace;letter-spacing:1px;}
+span{color:#FFD700;text-shadow:0 0 10px #FFD700;}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 30px;background:#111;position:sticky;top:0;z-index:1000;border-bottom:1px solid #FFD700;}
+.header-left{display:flex;align-items:center;gap:15px;}
+.header-left .logo{height:60px;width:60px;border-radius:10px;box-shadow:0 0 12px #FFD700;transition:0.3s;}
+.header-left .logo:hover{transform:rotate(5deg) scale(1.05);}
+.site-title{font-size:2.5rem;font-weight:700;color:#FFD700;text-shadow:0 0 12px #FFD700;}
+.header-right{display:flex;gap:10px;}
+.header-right button{background:#FFD700;border:none;padding:10px 20px;border-radius:6px;font-weight:700;color:#111;cursor:pointer;transition:0.3s;}
+.header-right button:hover{background:#e6c200;box-shadow:0 0 15px #FFD700;transform:scale(1.05);}
+#background{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;background:radial-gradient(circle,#0d0d0d 0%,#000 100%);}
+.scanner-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:2000;justify-content:center;align-items:center;padding:20px;}
+.scanner-content{background:#111;padding:30px;border-radius:15px;max-width:700px;width:100%;position:relative;box-shadow:0 0 25px #FFD700;}
+.close-btn{position:absolute;top:15px;right:15px;background:#FFD700;border:none;padding:8px 15px;border-radius:6px;font-weight:700;cursor:pointer;transition:0.3s;}
+.close-btn:hover{background:#e6c200;box-shadow:0 0 12px #FFD700;}
+.scan-title{color:#FFD700;margin-bottom:15px;font-size:1.3rem;text-shadow:0 0 8px #FFD700;}
+.scan-btn{background:#FFD700;border:none;padding:12px 25px;border-radius:10px;font-weight:bold;font-size:1.1rem;cursor:pointer;transition:0.3s;box-shadow:0 0 12px #FFD700;margin-bottom:15px;}
+.scan-btn:hover{background:#FF8C00;box-shadow:0 0 25px #FFD700,0 0 12px #fff;transform:scale(1.05);}
+.scan-progress{width:100%;height:30px;border:2px solid #FFD700;border-radius:15px;background:#1a1a1a;overflow:hidden;box-shadow:0 0 8px #FFD700 inset;position:relative;margin-bottom:10px;}
+.scan-bar{width:0%;height:100%;background:linear-gradient(90deg,#FFD700,#FF8C00,#FF0000);border-radius:15px;transition:0.4s;}
+.scan-percent{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:700;color:#FFD700;text-shadow:0 0 8px #111;z-index:10;}
+.scan-loader{border:6px solid #1a1a1a;border-top:6px solid #FFD700;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:15px auto;display:none;}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.scan-info{font-size:1rem;width:100%;text-align:left;}
+.scan-info p{margin:8px 0;}
+.scan-info ul{list-style:none;padding-left:0;margin-top:10px;}
+.scan-info li{margin:8px 0;padding:10px 15px;border-radius:12px;display:flex;justify-content:space-between;font-weight:600;background:#1a1a1a;box-shadow:0 0 6px #FFD700;}
+.scan-info li.detected{background:#ff4c4c;color:#fff;box-shadow:0 0 12px #ff4c4c;font-weight:700;}
+.scan-info li.warning{background:#FF8C00;color:#111;box-shadow:0 0 10px #FF8C00;}
+.scan-info li.safe{background:#FFD700;color:#111;box-shadow:0 0 8px #FFD700;}
+.stats-container{display:flex;justify-content:space-around;margin-top:15px;color:#FFD700;}
+.stats-container div{display:flex;flex-direction:column;align-items:center;}
+.stats-container div span{font-weight:700;}
+.radar-container{margin:25px auto;width:250px;height:250px;position:relative;}
+.radar-canvas{width:100%;height:100%;background:#111;border-radius:50%;box-shadow:0 0 15px #FFD700 inset;}
 </style>
 </head>
 <body>
 <canvas id="background"></canvas>
 <header>
-  <div class="header-left">
-    <img src="sentinelalogo.jpg" alt="logo" class="logo" />
-    <div>
-      <div class="site-title">Sentinela Scanner</div>
-      <div style="font-size:0.85rem;color:#bfbfbf">Avançado • Simulação • Visual</div>
-    </div>
-  </div>
-  <div class="header-actions">
-    <button class="btn" id="openHome">Página Inicial</button>
-    <button class="btn primary" id="backToMain">Voltar ao Site</button>
-  </div>
+<div class="header-left">
+<img src="sentinelalogo.jpg" alt="Logo" class="logo">
+<h1 class="site-title">Sentinela Scanner</h1>
+</div>
+<div class="header-right">
+<button onclick="window.location.href='pablofrontend.html'">Voltar</button>
+</div>
 </header>
 
-<div class="container">
-  <div class="left-col">
-    <div class="card hero">
-      <h1>Scanner Avançado Online</h1>
-      <p>Use o scanner para simular uma varredura completa da sua rede. Escolha entre modos rápidos ou detalhados, acompanhe CPU/RAM/IP simulados e visualize as ameaças — até 4 resultados por varredura.</p>
-      <div class="features">
-        <div class="feature"><h4>Velocidade Realista</h4><p>Taxas simuladas e variações dinâmicas durante a varredura.</p></div>
-        <div class="feature"><h4>Modo Detalhado</h4><p>Mais checks, informações técnicas e logs.</p></div>
-        <div class="feature"><h4>Resultados Selecionados</h4><p>Somente as ameaças mais significativas aparecem ao final.</p></div>
-      </div>
-      <div class="hero quick-actions">
-        <button class="btn primary" id="startHere">Iniciar Scanner</button>
-        <button class="btn" id="openDetailed">Abrir Modo Detalhado</button>
-        <div style="margin-left:auto" class="small-muted">Versão: 1.0 • Simulação</div>
-      </div>
-    </div>
-
-    <div class="card scanner-panel">
-      <div class="top-stats">
-        <div class="stat"><small>CPU</small><strong id="cpu">--%</strong></div>
-        <div class="stat"><small>RAM</small><strong id="ram">--%</strong></div>
-        <div class="stat"><small>IP</small><strong id="ip">0.0.0.0</strong></div>
-        <div class="stat"><small>Status</small><strong id="status">Idle</strong></div>
-      </div>
-
-      <div class="center-stage">
-        <div class="center-glow"></div>
-        <h3 style="margin-top:8px;color:#ffd700">Rede: <span id="networkName">RedeEscola_5G</span> • IP: <span id="networkIP">192.168.0.1</span></h3>
-
-        <div class="controls">
-          <button class="large-btn" id="startScan">Iniciar Verificação</button>
-          <button class="mode" id="btnQuick">Scan Rápido</button>
-          <button class="mode" id="btnDeep">Modo Detalhado</button>
-          <div id="loader" class="scan-loader" style="display:none"></div>
-          <div style="margin-left:auto" class="small-muted">Tempo estimado: <span id="timeEst">--</span></div>
-        </div>
-
-        <div class="scan-progress" aria-hidden="true">
-          <div id="bar" class="scan-bar"></div>
-          <div id="percent" class="scan-percent">0%</div>
-        </div>
-
-        <div class="scan-info">
-          <p><strong>Dispositivos Conectados:</strong> <span id="devices">0</span></p>
-          <p><strong>Velocidade:</strong> <span id="speed">0 Mbps</span></p>
-        </div>
-
-        <ul id="results" class="scan-results"></ul>
-
-        <div class="legend">
-          <div class="item legend-item safe"><div class="dot"></div><div class="small-muted" style="margin-left:6px">Seguro</div></div>
-          <div class="item legend-item warn"><div class="dot"></div><div class="small-muted" style="margin-left:6px">Aviso</div></div>
-          <div class="item legend-item det"><div class="dot"></div><div class="small-muted" style="margin-left:6px">Detectado</div></div>
-        </div>
-
-        <div class="details-panel">
-          <div class="controls-advanced">
-            <button class="btn" id="showLog">Mostrar Logs</button>
-            <button class="btn" id="clearLog">Limpar Logs</button>
-            <div style="margin-left:auto" class="small-muted">Resultados limitados a 4 itens</div>
-          </div>
-          <div class="device-list" id="deviceList"></div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 style="color:#ffd700">Modo Detalhado</h3>
-      <p class="small-muted">Ative o modo detalhado para registrar eventos, tempos por etapa e ter uma visão técnica (simulada) do processo.</p>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn" id="toggleDetailed">Ativar Detalhado</button>
-        <button class="btn" id="exportReport">Gerar Relatório</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="right-col">
-    <div class="card panel">
-      <h4 style="color:#ffd700">Painel de Logs</h4>
-      <div class="log-box" id="logBox"></div>
-      <div class="footer-note">Logs mostram passos simulados do scanner. Você pode copiar ou exportar o relatório.</div>
-    </div>
-
-    <div class="card panel">
-      <h4 style="color:#ffd700">Histórico de Scans</h4>
-      <div id="history" style="margin-top:10px"></div>
-    </div>
-
-    <div class="card panel">
-      <h4 style="color:#ffd700">Dispositivos</h4>
-      <div id="devicesPanel" class="device-list">
-        <div class="device"><span>Roteador Principal</span><small class="small-muted">Online</small></div>
-        <div class="device"><span>Servidor Local</span><small class="small-muted">Online</small></div>
-        <div class="device"><span>Switch Central</span><small class="small-muted">Online</small></div>
-      </div>
-    </div>
-
-    <div class="card panel">
-      <h4 style="color:#ffd700">Ações Rápidas</h4>
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <button class="btn" id="quickExport">Exportar JSON</button>
-        <button class="btn" id="downloadReport">Download .txt</button>
-      </div>
-    </div>
-  </div>
+<div id="scannerModal" class="scanner-modal">
+<div class="scanner-content">
+<span class="close-btn" id="closeScanner">&times;</span>
+<h3 class="scan-title">Rede: <span id="redeNome">RedeEscola_5G</span> | IP: <span id="redeIP">192.168.0.1</span></h3>
+<button id="startScan" class="scan-btn">Iniciar Verificação</button>
+<div class="scan-progress">
+<div id="scanBar" class="scan-bar"></div>
+<span id="scanPercent" class="scan-percent">0%</span>
+</div>
+<div class="scan-loader" id="scanLoader"></div>
+<div class="stats-container">
+<div><span id="cpuUso">0%</span><small>CPU</small></div>
+<div><span id="ramUso">0%</span><small>RAM</small></div>
+<div><span id="dispositivos">0</span><small>Dispositivos</small></div>
+<div><span id="velocidade">0 Mbps</span><small>Velocidade</small></div>
+</div>
+<div class="scan-info">
+<ul id="virusList"></ul>
+</div>
+<div class="radar-container">
+<canvas id="radarCanvas" class="radar-canvas"></canvas>
+</div>
+</div>
 </div>
 
 <script>
-const startScanBtn=document.getElementById('startScan')
-const btnQuick=document.getElementById('btnQuick')
-const btnDeep=document.getElementById('btnDeep')
-const barEl=document.getElementById('bar')
-const percentEl=document.getElementById('percent')
-const loaderEl=document.getElementById('loader')
-const devicesEl=document.getElementById('devices')
-const speedEl=document.getElementById('speed')
-const resultsEl=document.getElementById('results')
-const cpuEl=document.getElementById('cpu')
-const ramEl=document.getElementById('ram')
-const ipEl=document.getElementById('ip')
-const statusEl=document.getElementById('status')
-const timeEstEl=document.getElementById('timeEst')
-const logBox=document.getElementById('logBox')
-const deviceList=document.getElementById('deviceList')
-const networkName=document.getElementById('networkName')
-const networkIP=document.getElementById('networkIP')
-const startHere=document.getElementById('startHere')
-const openDetailed=document.getElementById('openDetailed')
-const toggleDetailed=document.getElementById('toggleDetailed')
-const exportReport=document.getElementById('exportReport')
-const clearLogBtn=document.getElementById('clearLog')
-const showLogBtn=document.getElementById('showLog')
-const historyEl=document.getElementById('history')
-const quickExport=document.getElementById('quickExport')
-const downloadReport=document.getElementById('downloadReport')
-const backToMain=document.getElementById('backToMain')
-const openHome=document.getElementById('openHome')
-const startHereHeader=document.getElementById('startHere')
-let detailedMode=false
-let scanning=false
-let progress=0
-let intervalId=null
-let logEntries=[]
-let history=[]
+const startBtn=document.getElementById("startScan");
+const scanBar=document.getElementById("scanBar");
+const scanPercent=document.getElementById("scanPercent");
+const scanLoader=document.getElementById("scanLoader");
+const dispositivosEl=document.getElementById("dispositivos");
+const velocidadeEl=document.getElementById("velocidade");
+const cpuEl=document.getElementById("cpuUso");
+const ramEl=document.getElementById("ramUso");
+const virusList=document.getElementById("virusList");
+const radarCanvas=document.getElementById("radarCanvas");
+const radarCtx=radarCanvas.getContext("2d");
+const modal=document.getElementById("scannerModal");
+const closeModal=document.getElementById("closeScanner");
+let scanning=false;
+let currentPercent=0;
+let interval=null;
+let radarAngle=0;
 
-const virusPool=[
-{name:'Trojan.Win32',level:'detected'},
-{name:'Backdoor.Shell',level:'detected'},
-{name:'Rootkit.Hidden',level:'detected'},
-{name:'Exploit.Kit',level:'detected'},
-{name:'Virus.Generic',level:'detected'},
-{name:'Spyware.Keylogger',level:'detected'},
-{name:'Adware.Generic',level:'warning'},
-{name:'PUP.Toolbar',level:'warning'},
-{name:'Worm.Autorun',level:'warning'},
-{name:'Heuristic.Susp',level:'warning'},
-{name:'Safe.File',level:'safe'},
-{name:'Clean.File',level:'safe'},
-{name:'Library.Cert',level:'safe'},
-{name:'Config.Susp',level:'warning'},
-{name:'Exploit.Payload',level:'detected'},
-{name:'Malicious.Script',level:'detected'}
-]
+const virusData=[
+{name:"Trojan.Win32",nivel:"detected"},
+{name:"Adware.Generic",nivel:"warning"},
+{name:"Spyware.Keylogger",nivel:"detected"},
+{name:"Worm.Autorun",nivel:"warning"},
+{name:"Safe.File",nivel:"safe"},
+{name:"Rootkit.Hidden",nivel:"detected"},
+{name:"Virus.Generic",nivel:"detected"},
+{name:"Clean.File",nivel:"safe"}
+];
 
-function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
-function pick(arr,n){const cp=arr.slice();const res=[];for(let i=0;i<n && cp.length;i++){res.push(cp.splice(Math.floor(Math.random()*cp.length),1)[0])}return res}
-function pushLog(txt){const t=new Date();const s=`[${t.toLocaleTimeString()}] ${txt}`;logEntries.unshift(s);if(logEntries.length>300)logEntries.pop();renderLogs()}
-function renderLogs(){logBox.innerHTML=logEntries.map(l=>`<div class="log-entry">${l}</div>`).join('')}
-function renderHistory(){historyEl.innerHTML=history.map(h=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(255,255,255,0.02)"><strong style="color:#ffd700">${h.mode}</strong> • ${h.date} • ${h.resultCount} resultados</div>`).join('')}
-
-function updateSystem(){cpuEl.textContent=`${rand(4,28)}%`;ramEl.textContent=`${rand(12,74)}%`;ipEl.textContent=`192.168.${rand(0,10)}.${rand(2,254)}`}
-
-function makeDeviceList(n){
-  deviceList.innerHTML=''
-  for(let i=0;i<n;i++){
-    const div=document.createElement('div')
-    div.className='device'
-    div.innerHTML=`<span>Dispositivo ${i+1}</span><small class="small-muted">${rand(1,100)}% uso</small>`
-    deviceList.appendChild(div)
-  }
+function showVirusResults(){
+virusList.innerHTML="";
+const sampled=virusData.sort(()=>0.5-Math.random()).slice(0,4);
+sampled.forEach(v=>{
+let li=document.createElement("li");
+li.className=v.nivel;
+li.textContent=v.nome;
+virusList.appendChild(li);
+});
 }
 
-function endScan(results,mode,durationMs){
-  scanning=false
-  loaderEl.style.display='none'
-  statusEl.textContent='Concluído'
-  pushLog(`Varredura finalizada (${mode}). Duração: ${Math.round(durationMs/1000)}s. Resultados: ${results.length}`)
-  renderResults(results)
-  history.unshift({mode:mode,date:new Date().toLocaleString(),resultCount:results.length})
-  if(history.length>20)history.pop()
-  renderHistory()
+function startScanFunc(){
+if(scanning)return;
+scanning=true;
+currentPercent=0;
+scanBar.style.width="0%";
+scanPercent.textContent="0%";
+scanLoader.style.display="block";
+virusList.innerHTML="";
+let dispositivos=5+Math.floor(Math.random()*5);
+dispositivosEl.textContent=dispositivos;
+let velocidadeBase=100+Math.floor(Math.random()*450);
+interval=setInterval(()=>{
+currentPercent+=Math.floor(Math.random()*5)+1;
+if(currentPercent>100)currentPercent=100;
+scanBar.style.width=currentPercent+"%";
+scanPercent.textContent=currentPercent+"%";
+velocidadeEl.textContent=(velocidadeBase+Math.floor(Math.random()*40-20))+" Mbps";
+cpuEl.textContent=Math.floor(Math.random()*100)+"%";
+ramEl.textContent=Math.floor(Math.random()*100)+"%";
+if(currentPercent>=100){
+clearInterval(interval);
+scanning=false;
+scanLoader.style.display="none";
+showVirusResults();
+}
+},200);
 }
 
-function renderResults(results){
-  resultsEl.innerHTML=''
-  results.forEach(r=>{
-    const li=document.createElement('li')
-    li.className=r.level
-    const tag=document.createElement('div')
-    tag.className='tag'
-    tag.textContent=r.level.toUpperCase()
-    li.innerHTML=`<div style="display:flex;flex-direction:column"><span>${r.name}</span><small class="small-muted">${r.detail || 'Assinatura: '+rand(1000,9999)}</small></div>`
-    li.appendChild(tag)
-    resultsEl.appendChild(li)
-  })
-}
-
-function start(mode){
-  if(scanning) return
-  scanning=true
-  progress=0
-  barEl.style.width='0%'
-  percentEl.textContent='0%'
-  loaderEl.style.display='block'
-  resultsEl.innerHTML=''
-  devicesEl.textContent=rand(3,20)
-  makeDeviceList(rand(3,10))
-  statusEl.textContent='Verificando'
-  pushLog(`Iniciando varredura em modo: ${mode}`)
-  const baseSpeed=rand(80,520)
-  speedEl.textContent=`${baseSpeed} Mbps`
-  let duration=6000
-  let step=rand(4,8)
-  if(mode==='quick'){duration=2200;step=rand(10,18)}
-  if(mode==='deep'){duration=14000;step=rand(1,4)}
-  timeEstEl.textContent=`~${Math.ceil(duration/1000)}s`
-  const increments=Math.max(8,Math.round(duration/200))
-  const intervalMs=Math.max(40,Math.round(duration/increments))
-  let ticks=0
-  const resultsCount=rand(1,4)
-  const results=pick(virusPool,resultsCount)
-  results.forEach(r=>{r.detail=`Nível de risco: ${r.level} • ID:${rand(10000,99999)}`})
-  const tStart=Date.now()
-  clearInterval(intervalId)
-  intervalId=setInterval(()=>{
-    ticks++
-    progress=Math.min(100,progress+step)
-    barEl.style.width=progress+'%'
-    percentEl.textContent=progress+'%'
-    updateSystem()
-    speedEl.textContent=`${baseSpeed+rand(-25,25)} Mbps`
-    if(detailedMode && ticks%3===0) pushLog(`Checando assinatura ${rand(2000,9000)} ... etapa ${ticks}`)
-    if(progress>=100 || ticks*intervalMs>=duration){
-      clearInterval(intervalId)
-      const tEnd=Date.now()
-      endScan(results,mode,tEnd-tStart)
-    }
-  }, intervalMs)
-}
-
-startScanBtn.addEventListener('click',()=>start('normal'))
-btnQuick.addEventListener('click',()=>start('quick'))
-btnDeep.addEventListener('click',()=>start('deep'))
-startHere.addEventListener('click',()=>start('normal'))
-openDetailed.addEventListener('click',()=>{detailedMode=true;toggleDetailed.textContent='Desativar Detalhado';pushLog('Modo detalhado ativado')})
-toggleDetailed.addEventListener('click',()=>{detailedMode=!detailedMode;toggleDetailed.textContent=detailedMode?'Desativar Detalhado':'Ativar Detalhado';pushLog(`Modo detalhado ${detailedMode?'ativado':'desativado'}`)})
-exportReport.addEventListener('click',()=>{const rep={time:new Date().toLocaleString(),network:networkName.textContent,ip:networkIP.textContent,history:history,logs:logEntries.slice(0,200)};const dataStr='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(rep,null,2));const a=document.createElement('a');a.href=dataStr;a.download='sentinela_report.json';document.body.appendChild(a);a.click();a.remove();pushLog('Relatório JSON gerado')})
-clearLogBtn.addEventListener('click',()=>{logEntries=[];renderLogs();pushLog('Logs limpos')})
-showLogBtn.addEventListener('click',()=>{logBox.scrollTop=0;pushLog('Logs visualizados')})
-quickExport.addEventListener('click',()=>{const txt=logEntries.join('\n');const blob=new Blob([txt],{type:'text/plain'});const url=URL.createO
+startBtn.addEventListener("click

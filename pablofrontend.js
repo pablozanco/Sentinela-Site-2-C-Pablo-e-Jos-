@@ -1,19 +1,15 @@
 const canvas = document.getElementById("background");
 const ctx = canvas.getContext("2d");
 const scannerBtn = document.querySelector(".scanner-btn");
-const loginBtn = document.querySelector(".login-btn");
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
-  canvas.height = Math.max(window.innerHeight, document.body.scrollHeight);
+  canvas.height = window.innerHeight;
 }
 
 resizeCanvas();
 
 window.addEventListener("resize", resizeCanvas);
-window.addEventListener("scroll", () => {
-  canvas.height = Math.max(window.innerHeight, document.body.scrollHeight);
-});
 
 const particles = Array.from({ length: 150 }, () => ({
   x: Math.random() * canvas.width,
@@ -24,8 +20,7 @@ const particles = Array.from({ length: 150 }, () => ({
 }));
 
 function animateParticles() {
-  ctx.fillStyle = "rgba(13,13,13,0.3)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // limpa apenas o canvas
   particles.forEach(p => {
     p.x += p.dx;
     p.y += p.dy;
@@ -57,7 +52,6 @@ window.addEventListener("load", () => {
       }, i * 150);
     });
   };
-
   animateCards(document.querySelectorAll(".highlight-card"));
   animateCards(document.querySelectorAll(".package-card"));
   animateCards(document.querySelectorAll(".card"));
@@ -73,4 +67,3 @@ depoCards.forEach(card => {
     }, 300);
   });
 });
-

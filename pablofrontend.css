@@ -210,6 +210,14 @@ footer {
   transform: scale(1.2);
 }
 
+img.monitoramento, img.firewall {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 @media (max-width: 900px) {
   #sidebar {
     width: 180px;
@@ -248,17 +256,6 @@ footer {
   .services .cards {
     grid-template-columns: 1fr;
   }
-}
-
-img.monitoramento, img.firewall {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-@media (max-width: 700px) {
   img.monitoramento, img.firewall {
     max-width: 90%;
   }

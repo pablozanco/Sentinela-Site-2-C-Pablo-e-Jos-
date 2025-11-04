@@ -249,3 +249,18 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* --- Correção das imagens bugadas --- */
+img.monitoramento, img.firewall {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+  img.monitoramento, img.firewall {
+    max-width: 90%;
+  }
+}

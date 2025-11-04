@@ -9,6 +9,17 @@ html, body {
   color: #f5f5f5;
   overflow-x: hidden;
   background: #0d0d0d;
+  min-height: 100vh;
+}
+
+#background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: #0d0d0d;
 }
 
 header {
@@ -82,6 +93,8 @@ button:hover {
   padding-top: 100px;
   border-right: 1px solid #FFD700;
   overflow-y: auto;
+  z-index: 800;
+  transition: 0.3s;
 }
 
 #sidebar ul {
@@ -122,7 +135,6 @@ p {
   line-height: 1.6;
 }
 
-/* Cards gerais */
 .intro-highlights, .package-cards, .depo-cards {
   display: flex;
   justify-content: center;
@@ -197,7 +209,6 @@ footer {
   transform: scale(1.2);
 }
 
-/* ======== Responsividade ======== */
 @media (max-width: 900px) {
   #sidebar {
     width: 180px;
@@ -220,5 +231,20 @@ footer {
   }
   .site-title {
     font-size: 1.8rem;
+  }
+  .header-buttons {
+    position: static;
+    gap: 6px;
+  }
+  .intro-highlights, .package-cards, .depo-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  .highlight-card, .package-card, .depo-card {
+    width: 90%;
+    max-width: 320px;
+  }
+  .services .cards {
+    grid-template-columns: 1fr;
   }
 }

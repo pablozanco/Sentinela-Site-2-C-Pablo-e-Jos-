@@ -250,7 +250,6 @@ footer {
   }
 }
 
-/* --- Correção das imagens bugadas --- */
 img.monitoramento, img.firewall {
   width: 100%;
   max-width: 500px;

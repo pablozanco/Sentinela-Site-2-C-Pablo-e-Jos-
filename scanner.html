@@ -1,417 +1,484 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sentinela • Scanner Avançado</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06080a;
+  --panel:#0f1417;
+  --muted:#98a4b3;
+  --gold:#FFD700;
+  --gold-2:#e6bf00;
+  --glass: rgba(255,255,255,0.02);
+  --glass-2: rgba(255,255,255,0.03);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:linear-gradient(180deg,#070708 0%, #020203 100%);font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#eaf1f9;}
+body{overflow:hidden}
 
-<html lang="pt-BR">  
-<head>  
-<meta charset="utf-8" />  
-<meta name="viewport" content="width=device-width,initial-scale=1" />  
-<title>Sentinela • Scanner Avançado (Final)</title>  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">  <style>  
-  :root{  
-    --bg:#06080a;  
-    --panel:#0f1417;  
-    --muted:#98a4b3;  
-    --gold:#FFD700;  
-    --gold-2:#e6bf00;  
-    --glass: rgba(255,255,255,0.02);  
-  }  
-  *{box-sizing:border-box;margin:0;padding:0}  
-  html,body{height:100%;background:linear-gradient(180deg,#070708 0%, #020203 100%);font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#eaf1f9;overflow:hidden}  
-  
-  /* Header */  
-  header{  
-    position:fixed;left:0;right:0;top:0;height:78px;display:flex;align-items:center;justify-content:space-between;padding:12px 28px;  
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005));  
-    border-bottom:1px solid rgba(255,215,0,0.06);z-index:1600;backdrop-filter: blur(6px);  
-  }  
-  .brand{display:flex;align-items:center;gap:12px}  
-  .brand img{width:56px;height:56px;border-radius:10px;object-fit:cover;box-shadow:0 8px 30px rgba(255,215,0,0.05)}  
-  .brand .title{font-family:Orbitron,monospace;font-weight:700;color:var(--gold);font-size:18px}  
-  .brand .sub{font-size:12px;color:var(--muted);margin-top:-4px}  
-  
-  .header-actions{display:flex;align-items:center;gap:10px}  
-  .header-actions button{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}  
-  .header-actions a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}  
-  .header-actions .primary{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#111;border:none;box-shadow:0 8px 30px rgba(255,215,0,0.08)}  
-  
-  .app {  
-    position:relative; padding:110px 36px 36px 36px;  
-    display:grid; grid-template-columns: 360px 1fr 360px; gap:20px;  
-    height:calc(100vh - 146px); z-index:1500;  
-  }  
-  
-  .panel{  
-    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.0));  
-    border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.02);box-shadow:0 10px 30px rgba(0,0,0,0.55);  
-  }  
-  .panel h4{color:var(--gold);margin-bottom:12px;font-weight:700}  
-  .tool{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;color:var(--muted);cursor:pointer}  
-  .tool:hover{background:var(--glass);color:#fff}  
-  
-  .center{display:flex;flex-direction:column;gap:14px}  
-  .scanner-card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.02)}  
-  .scanner-head{display:flex;justify-content:space-between;align-items:center}  
-  .scanner-head h2{font-family:Orbitron,monospace;color:var(--gold);font-size:20px}  
-  .scanner-sub{color:var(--muted);font-size:13px}  
-  
-  .hud{display:flex;gap:14px;align-items:flex-start}  
-  .radar{width:320px;height:320px;border-radius:50%;position:relative;background:  
-    radial-gradient(circle at 40% 35%, rgba(255,215,0,0.02), transparent 40%),  
-    linear-gradient(180deg, rgba(255,255,255,0.01), transparent);  
-    border:1px solid rgba(255,215,0,0.04);box-shadow:inset 0 0 40px rgba(255,215,0,0.02);  
-    display:flex;align-items:center;justify-content:center;overflow:hidden  
-  }  
-  .radar .sweep{position:absolute;left:-50%;top:-50%;width:200%;height:200%;background:conic-gradient(rgba(255,215,0,0.06), rgba(255,215,0,0) 24%);transform-origin:center;animation:spin 4.8s linear infinite}  
-  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}  
-  .radar .ring{position:absolute;border-radius:50%}  
-  .radar .ring.r1{width:300px;height:300px;border:1px solid rgba(255,215,0,0.03)}  
-  .radar .ring.r2{width:220px;height:220px;border:1px dashed rgba(255,215,0,0.02)}  
-  .radar .center-dot{width:8px;height:8px;background:var(--gold);border-radius:50%}  
-  
-  .blip{position:absolute;width:10px;height:10px;background:var(--gold);border-radius:50%;box-shadow:0 0 12px rgba(255,215,0,0.65);transform:translate(-50%,-50%);opacity:0}  
-  
-  .side{display:flex;flex-direction:column;gap:10px;min-width:300px}  
-  .progress-block{background:var(--glass);padding:12px;border-radius:10px}  
-  .progress-line{height:20px;background:#0b0f10;border-radius:10px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.02)}  
-  .progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#e5b800);transition:width .25s}  
-  .progress-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:Orbitron;color:var(--gold)}  
-  
-  .controls{display:flex;gap:8px;margin-top:10px}  
-  .btn{padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--muted);cursor:pointer;font-weight:700}  
-  .btn.primary{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#0b0b0b;border:none;box-shadow:0 8px 30px rgba(255,215,0,0.08)}  
-  
-  .indicators{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}  
-  .ind{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:8px;border-radius:8px;font-size:13px;color:var(--muted)}  
-  .ind .val{font-weight:700;color:#fff;margin-top:6px}  
-  
-  .results{margin-top:12px}  
-  .results ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}  
-  .result-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:#0d1112;border:1px solid rgba(255,255,255,0.02);font-weight:700}  
-  .result-item.safe{border-left:4px solid #4cd137;color:#cffecc}  
-  .result-item.warning{border-left:4px solid #ffb020;color:#fff6df}  
-  .result-item.detected{border-left:4px solid #ff6b6b;color:#ffd6d6}  
-  
-  .logs{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:12px;border-radius:10px;height:100%;overflow:auto;border:1px solid rgba(255,255,255,0.02)}  
-  .log-line{font-family:Roboto Mono;font-size:13px;color:var(--muted);padding:6px 0;border-bottom:1px dashed rgba(255,255,255,0.01)}  
-  
-  .footer{grid-column:1/-1;text-align:center;color:var(--muted);padding-top:8px;font-size:13px}  
-  
-  @media (max-width:1100px){  
-    .app{grid-template-columns:1fr;padding:120px 12px 12px 12px;height:auto;overflow:auto}  
-    .radar{width:220px;height:220px}  
-    .side{min-width:unset}  
-  }  
-</style>  </head>  
-<body>  <canvas id="bg" style="position:fixed;inset:0;z-index:0;"></canvas>
+/* Header */
+header{
+  position:fixed;left:0;right:0;top:0;height:78px;display:flex;align-items:center;justify-content:space-between;padding:12px 28px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005));
+  border-bottom:1px solid rgba(255,215,0,0.06);z-index:1600;backdrop-filter: blur(6px);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:56px;height:56px;border-radius:10px;object-fit:cover;box-shadow:0 8px 30px rgba(255,215,0,0.05)}
+.brand .title{font-family:Orbitron,monospace;font-weight:700;color:var(--gold);font-size:18px}
+.brand .sub{font-size:12px;color:var(--muted);margin-top:-4px}
 
-  <header>  
-    <div class="brand">  
-      <img src="sentinelalogo.jpg" alt="logo" onerror="this.style.display='none'">  
-      <div>  
-        <div class="title">Sentinela Security</div>  
-        <div class="sub">Monitoramento & Defesa de Rede</div>  
-      </div>  
-    </div>  <div class="header-actions">  
-  <a href="index.html">Voltar</a>  
-  <button id="btnQuick" class="primary">Quick Scan</button>  
-  <button id="btnFull">Full Scan</button>  
-  <button id="btnToggleDetail">Mostrar Detalhes</button>  
+.header-actions{display:flex;align-items:center;gap:10px}
+.header-actions button{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+.header-actions a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+.header-actions .primary{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#111;border:none;box-shadow:0 8px 30px rgba(255,215,0,0.08)}
+
+.app {
+  position:relative; padding:110px 36px 36px 36px;
+  display:grid; grid-template-columns: 320px 1fr 320px; gap:20px;
+  height:calc(100vh - 146px); z-index:1500;
+}
+
+.panel{
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.0));
+  border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.02);box-shadow:0 10px 30px rgba(0,0,0,0.55);
+}
+.panel h4{color:var(--gold);margin-bottom:12px;font-weight:700}
+.tool{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;color:var(--muted);cursor:pointer}
+.tool:hover{background:var(--glass);color:#fff}
+
+.center{display:flex;flex-direction:column;gap:14px}
+.scanner-card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.02)}
+.scanner-head{display:flex;justify-content:space-between;align-items:center}
+.scanner-head h2{font-family:Orbitron,monospace;color:var(--gold);font-size:20px}
+.scanner-sub{color:var(--muted);font-size:13px}
+
+.hud{display:flex;gap:14px;align-items:flex-start}
+.radar{width:320px;height:320px;border-radius:50%;position:relative;background:
+  radial-gradient(circle at 40% 35%, rgba(255,215,0,0.02), transparent 40%),
+  linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  border:1px solid rgba(255,215,0,0.04);box-shadow:inset 0 0 40px rgba(255,215,0,0.02);
+  display:flex;align-items:center;justify-content:center;overflow:hidden
+}
+.radar .sweep{position:absolute;left:-50%;top:-50%;width:200%;height:200%;background:conic-gradient(rgba(255,215,0,0.06), rgba(255,215,0,0) 24%);transform-origin:center;animation:spin 4.8s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.radar .ring{position:absolute;border-radius:50%}
+.radar .ring.r1{width:300px;height:300px;border:1px solid rgba(255,215,0,0.03)}
+.radar .ring.r2{width:220px;height:220px;border:1px dashed rgba(255,215,0,0.02)}
+.radar .center-dot{width:8px;height:8px;background:var(--gold);border-radius:50%}
+
+.blip{position:absolute;width:10px;height:10px;background:var(--gold);border-radius:50%;box-shadow:0 0 12px rgba(255,215,0,0.65);transform:translate(-50%,-50%);opacity:0;transition:opacity .28s}
+
+.side{display:flex;flex-direction:column;gap:10px;min-width:300px}
+.progress-block{background:var(--glass);padding:12px;border-radius:10px}
+.progress-line{height:20px;background:#0b0f10;border-radius:10px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.02)}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#e5b800);transition:width .25s}
+.progress-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:Orbitron;color:var(--gold)}
+
+.controls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn{padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--muted);cursor:pointer;font-weight:700}
+.btn.primary{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#0b0b0b;border:none;box-shadow:0 8px 30px rgba(255,215,0,0.08)}
+
+.indicators{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ind{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:8px;border-radius:8px;font-size:13px;color:var(--muted)}
+.ind .val{font-weight:700;color:#fff;margin-top:6px}
+
+.results{margin-top:12px}
+.results ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.result-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:#0d1112;border:1px solid rgba(255,255,255,0.02);font-weight:700}
+.result-item.safe{border-left:4px solid #4cd137;color:#cffecc}
+.result-item.warning{border-left:4px solid #ffb020;color:#fff6df}
+.result-item.detected{border-left:4px solid #ff6b6b;color:#ffd6d6}
+
+.logs{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:12px;border-radius:10px;height:100%;overflow:auto;border:1px solid rgba(255,255,255,0.02)}
+.log-line{font-family:Roboto Mono;font-size:13px;color:var(--muted);padding:6px 0;border-bottom:1px dashed rgba(255,255,255,0.01)}
+
+.footer{grid-column:1/-1;text-align:center;color:var(--muted);padding-top:8px;font-size:13px}
+
+/* small screen layout */
+@media (max-width:1060px){
+  body{overflow:auto}
+  .app{grid-template-columns:1fr;padding:120px 12px 36px 12px;height:auto;overflow:visible}
+  .radar{width:260px;height:260px;margin:0 auto}
+  .side{min-width:unset}
+  header{padding:12px 16px}
+  .header-actions{gap:6px}
+  .brand .title{font-size:16px}
+  .panel{padding:12px}
+  .controls{justify-content:center}
+}
+
+/* extra small */
+@media (max-width:420px){
+  .radar{width:220px;height:220px}
+  .scanner-head h2{font-size:18px}
+  .progress-center{font-size:12px}
+  .header-actions a, .header-actions button{padding:6px 8px;font-size:13px}
+  .brand img{width:44px;height:44px}
+}
+</style>
+</head>
+<body>
+<canvas id="bg" style="position:fixed;inset:0;z-index:0;"></canvas>
+
+<header>
+  <div class="brand">
+    <img src="sentinelalogo.jpg" alt="logo" onerror="this.style.display='none'">
+    <div>
+      <div class="title">Sentinela Security</div>
+      <div class="sub">Monitoramento & Defesa de Rede</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <a href="index.html">Voltar</a>
+    <button id="btnQuick" class="primary">Quick Scan</button>
+    <button id="btnFull">Full Scan</button>
+    <button id="btnToggleDetail">Mostrar Detalhes</button>
+  </div>
+</header>
+
+<div class="app" role="application">
+  <div class="panel">
+    <h4>Ferramentas</h4>
+    <div class="tool" id="toolQuick">▶ Verificação Rápida</div>
+    <div class="tool" id="toolFull">▶ Verificação Completa</div>
+
+    <div style="height:12px"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-weight:700;color:var(--gold)">Monitoramento</div>
+        <div style="color:var(--muted);font-size:13px">Tempo real</div>
+      </div>
+      <div class="switch" id="liveSwitch" title="Ativar monitoramento" style="width:48px;height:26px;border-radius:16px;background:rgba(255,255,255,0.02);display:flex;align-items:center;padding:3px;">
+        <div class="knob" id="liveKnob" style="width:20px;height:20px;border-radius:50%;background:var(--gold);transform:translateX(0);transition:transform .18s"></div>
+      </div>
+    </div>
+
+    <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.02)">
+
+    <h4>Atalhos</h4>
+    <div class="tool" id="toolAlert">⚠️ Simular Alerta</div>
+    <div class="tool" id="toolExport">📄 Exportar Relatório</div>
+
+    <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.02)">
+
+    <div style="font-size:13px;color:var(--muted)"><strong>Versão</strong><br>1.0 • Beta</div>
+  </div>
+
+  <div class="center">
+    <div class="scanner-card">
+      <div class="scanner-head">
+        <div>
+          <h2>Scanner Avançado</h2>
+          <div class="scanner-sub">Verificação e análise — Sentinela</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;color:var(--muted)">Status</div>
+          <div id="statusLabel" style="font-weight:700;color:#fff">Pronto</div>
+        </div>
+      </div>
+
+      <div class="hud" style="margin-top:12px">
+        <div class="radar" id="radar">
+          <div class="sweep"></div>
+          <div class="ring r1"></div>
+          <div class="ring r2"></div>
+          <div class="center-dot"></div>
+        </div>
+
+        <div class="side">
+          <div class="progress-block panel" style="padding:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:13px;color:var(--muted)">Progresso</div>
+              <div id="percentLabel" style="font-weight:700;color:var(--gold)">0%</div>
+            </div>
+            <div style="height:8px"></div>
+            <div class="progress-line">
+              <div class="progress-fill" id="progressFill"></div>
+              <div class="progress-center" id="progressCenter">0%</div>
+            </div>
+            <div style="height:10px"></div>
+            <div class="controls">
+              <button class="btn primary" id="startBtn">Iniciar</button>
+              <button class="btn" id="stopBtn">Parar</button>
+              <button class="btn" id="resetBtn">Reiniciar</button>
+            </div>
+          </div>
+
+          <div class="panel" style="padding:12px">
+            <div style="display:flex;justify-content:space-between">
+              <div class="small-muted">Dispositivos</div><div id="deviceCount" style="font-weight:700">0</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px">
+              <div class="small-muted">Velocidade</div><div id="netSpeed" style="font-weight:700">0 Mbps</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px">
+              <div class="small-muted">Ameaças</div><div id="threatCount" style="font-weight:700;color:#ff6b6b">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results" style="margin-top:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-weight:700;color:var(--muted)">Resultados</div>
+          <div style="font-size:13px;color:var(--muted)">Mostrando até 4</div>
+        </div>
+        <ul id="resultList" style="margin-top:10px"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <h4>Indicadores</h4>
+      <div class="indicators" style="margin-top:8px">
+        <div class="ind"><div class="label">CPU</div><div class="val" id="cpuVal">0%</div></div>
+        <div class="ind"><div class="label">Memória</div><div class="val" id="ramVal">0%</div></div>
+        <div class="ind"><div class="label">Conexões</div><div class="val" id="connVal">0</div></div>
+        <div class="ind"><div class="label">IP Local</div><div class="val" id="ipVal">192.168.0.1</div></div>
+      </div>
+    </div>
+
+    <div class="panel logs" id="logPanel">
+      <h4 style="margin-bottom:8px;color:var(--gold)">Logs de Atividade</h4>
+      <div id="logsContainer" style="height:340px;overflow:auto"></div>
+    </div>
+  </div>
+
+  <div class="footer">Sentinela • Painel de segurança — Desenvolvido por Pablo & José</div>
 </div>
 
-  </header>    <div class="app" role="application">  <div class="panel">  
-  <h4>Ferramentas</h4>  
-  <div class="tool" id="toolQuick">▶ Verificação Rápida</div>  
-  <div class="tool" id="toolFull">▶ Verificação Completa</div>  
+<script>
+(function(){
+  // utils
+  const rand = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+  const $ = id => document.getElementById(id);
 
-  <div style="height:12px"></div>  
-  <div style="display:flex;justify-content:space-between;align-items:center">  
-    <div>  
-      <div style="font-weight:700;color:var(--gold)">Monitoramento</div>  
-      <div style="color:var(--muted);font-size:13px">Tempo real</div>  
-    </div>  
-    <div class="switch" id="liveSwitch" title="Ativar monitoramento">  
-      <div class="knob" id="liveKnob" style="transform:translateX(0)"></div>  
-    </div>  
-  </div>  
+  // DOM refs
+  const radar = $('radar'), startBtn = $('startBtn'), stopBtn = $('stopBtn'), resetBtn = $('resetBtn');
+  const progressFill = $('progressFill'), progressCenter = $('progressCenter'), percentLabel = $('percentLabel');
+  const deviceCount = $('deviceCount'), netSpeed = $('netSpeed'), threatCount = $('threatCount');
+  const resultList = $('resultList'), logsContainer = $('logsContainer');
+  const cpuVal = $('cpuVal'), ramVal = $('ramVal'), connVal = $('connVal'), ipVal = $('ipVal');
+  const btnQuick = $('btnQuick'), btnFull = $('btnFull'), btnToggleDetail = $('btnToggleDetail');
+  const toolQuick = $('toolQuick'), toolFull = $('toolFull'), toolAlert = $('toolAlert'), toolExport = $('toolExport');
+  const liveSwitch = $('liveSwitch') || null, liveKnob = $('liveKnob') || null;
 
-  <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.02)">  
+  let scanning = false, progress = 0, scanTimer = null, currentMode = 'manual', liveMode = false;
 
-  <h4>Atalhos</h4>  
-  <div class="tool" id="toolAlert">⚠️ Simular Alerta</div>  
-  <div class="tool" id="toolExport">📄 Exportar Relatório</div>  
+  const virusBank = [
+    {nome:'Trojan.Win32',nivel:'detected'},
+    {nome:'Adware.Generic',nivel:'warning'},
+    {nome:'Spyware.Keylogger',nivel:'detected'},
+    {nome:'Worm.Autorun',nivel:'warning'},
+    {nome:'Rootkit.Hidden',nivel:'detected'},
+    {nome:'Backdoor.Dark',nivel:'detected'},
+    {nome:'Malware.Ransom',nivel:'detected'},
+    {nome:'Phishing.Attempt',nivel:'warning'},
+    {nome:'Hijacker.Browser',nivel:'warning'},
+    {nome:'Botnet.Agent',nivel:'detected'},
+    {nome:'Safe.Update',nivel:'safe'},
+    {nome:'Cleaner.Temp',nivel:'safe'}
+  ];
 
-  <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.02)">  
+  function pushLog(msg){
+    const t = new Date().toLocaleTimeString();
+    const div = document.createElement('div');
+    div.className = 'log-line';
+    div.textContent = `[${t}] ${msg}`;
+    logsContainer.prepend(div);
+    if(logsContainer.childElementCount > 400) logsContainer.removeChild(logsContainer.lastChild);
+  }
 
-  <div style="font-size:13px;color:var(--muted)"><strong>Versão</strong><br>1.0 • Beta</div>  
-</div>  
+  function spawnBlip(){
+    const node = document.createElement('div');
+    node.className = 'blip';
+    const size = rand(6,14);
+    // place inside radar circle area
+    const radius = Math.min(radar.clientWidth, radar.clientHeight) / 2 - 10;
+    const angle = Math.random() * Math.PI * 2;
+    const r = Math.random() * radius * 0.9;
+    const cx = radar.clientWidth/2 + Math.cos(angle)*r;
+    const cy = radar.clientHeight/2 + Math.sin(angle)*r;
+    node.style.left = cx + 'px'; node.style.top = cy + 'px';
+    node.style.width = size + 'px'; node.style.height = size + 'px';
+    radar.appendChild(node);
+    // fade in/out
+    requestAnimationFrame(()=> node.style.opacity = 1);
+    setTimeout(()=> {
+      node.style.transition='opacity 1.2s';
+      node.style.opacity = 0;
+      setTimeout(()=> node.remove(),1200);
+    }, 2200 + rand(0,1400));
+  }
 
-<div class="center">  
-  <div class="scanner-card">  
-    <div class="scanner-head">  
-      <div>  
-        <h2>Scanner Avançado</h2>  
-        <div class="scanner-sub">Verificação e análise — Sentinela</div>  
-      </div>  
-      <div style="text-align:right">  
-        <div style="font-size:13px;color:var(--muted)">Status</div>  
-        <div id="statusLabel" style="font-weight:700;color:#fff">Pronto</div>  
-      </div>  
-    </div>  
+  function pickViruses(){
+    const copy = [...virusBank]; const out = [];
+    for(let i=0;i<4;i++){ const idx = rand(0, copy.length-1); out.push(copy.splice(idx,1)[0]); }
+    return out;
+  }
 
-    <div class="hud" style="margin-top:12px">  
-      <div class="radar" id="radar">  
-        <div class="sweep"></div>  
-        <div class="ring r1"></div>  
-        <div class="ring r2"></div>  
-        <div class="center-dot"></div>  
-      </div>  
+  function showResults(){
+    resultList.innerHTML = '';
+    const chosen = pickViruses(); let detected = 0;
+    chosen.forEach(v=>{
+      const li = document.createElement('li');
+      li.className = 'result-item ' + (v.nivel === 'safe' ? 'safe' : (v.nivel === 'warning' ? 'warning' : 'detected'));
+      li.innerHTML = `<div>${v.nome}</div><div style="opacity:.9">${v.nivel.toUpperCase()}</div>`;
+      resultList.appendChild(li);
+      if(v.nivel === 'detected') detected++;
+    });
+    threatCount.textContent = detected;
+    pushLog('Resultados: ' + chosen.map(s=>`${s.nome}(${s.nivel})`).join(', '));
+  }
 
-      <div class="side">  
-        <div class="progress-block panel" style="padding:12px">  
-          <div style="display:flex;justify-content:space-between;align-items:center">  
-            <div style="font-size:13px;color:var(--muted)">Progresso</div>  
-            <div id="percentLabel" style="font-weight:700;color:var(--gold)">0%</div>  
-          </div>  
-          <div style="height:8px"></div>  
-          <div class="progress-line">  
-            <div class="progress-fill" id="progressFill"></div>  
-            <div class="progress-center" id="progressCenter">0%</div>  
-          </div>  
-          <div style="height:10px"></div>  
-          <div class="controls">  
-            <button class="btn primary" id="startBtn">Iniciar</button>  
-            <button class="btn" id="stopBtn">Parar</button>  
-            <button class="btn" id="resetBtn">Reiniciar</button>  
-          </div>  
-        </div>  
+  function updateIndicators(){
+    cpuVal.textContent = rand(5,70) + '%';
+    ramVal.textContent = rand(18,88) + '%';
+    connVal.textContent = rand(1,120);
+    ipVal.textContent = `192.168.${rand(0,10)}.${rand(2,254)}`;
+  }
+  setInterval(updateIndicators, 2500);
 
-        <div class="panel" style="padding:12px">  
-          <div style="display:flex;justify-content:space-between">  
-            <div class="small-muted">Dispositivos</div><div id="deviceCount" style="font-weight:700">0</div>  
-          </div>  
-          <div style="display:flex;justify-content:space-between;margin-top:8px">  
-            <div class="small-muted">Velocidade</div><div id="netSpeed" style="font-weight:700">0 Mbps</div>  
-          </div>  
-          <div style="display:flex;justify-content:space-between;margin-top:8px">  
-            <div class="small-muted">Ameaças</div><div id="threatCount" style="font-weight:700;color:#ff6b6b">0</div>  
-          </div>  
-        </div>  
-      </div>  
-    </div>  
+  function setProgress(p){
+    progressFill.style.width = p + '%';
+    progressCenter.textContent = p + '%';
+    percentLabel.textContent = p + '%';
+  }
 
-    <div class="results" style="margin-top:12px">  
-      <div style="display:flex;justify-content:space-between;align-items:center">  
-        <div style="font-weight:700;color:var(--muted)">Resultados</div>  
-        <div style="font-size:13px;color:var(--muted)">Mostrando até 4</div>  
-      </div>  
-      <ul id="resultList" style="margin-top:10px"></ul>  
-    </div>  
-  </div>  
-</div>  
+  function startScan(mode='quick'){
+    if(scanning) return;
+    scanning = true; currentMode = mode; progress = 0;
+    resultList.innerHTML = ''; threatCount.textContent = 0;
+    deviceCount.textContent = rand(6,28);
+    netSpeed.textContent = (100 + rand(0,420)) + ' Mbps';
+    pushLog(`Iniciando varredura (${mode === 'quick' ? 'Rápida' : 'Completa'})`);
+    $('statusLabel').textContent = 'Executando';
 
-<div>  
-  <div class="panel">  
-    <h4>Indicadores</h4>  
-    <div class="indicators" style="margin-top:8px">  
-      <div class="ind"><div class="label">CPU</div><div class="val" id="cpuVal">0%</div></div>  
-      <div class="ind"><div class="label">Memória</div><div class="val" id="ramVal">0%</div></div>  
-      <div class="ind"><div class="label">Conexões</div><div class="val" id="connVal">0</div></div>  
-      <div class="ind"><div class="label">IP Local</div><div class="val" id="ipVal">192.168.0.1</div></div>  
-    </div>  
-  </div>  
+    // initial blips
+    for(let i=0;i<6;i++) setTimeout(spawnBlip, i*160);
 
-  <div class="panel logs" id="logPanel">  
-    <h4 style="margin-bottom:8px;color:var(--gold)">Logs de Atividade</h4>  
-    <div id="logsContainer" style="height:340px;overflow:auto"></div>  
-  </div>  
-</div>  
+    const stepMin = mode === 'quick' ? 6 : 3;
+    const stepMax = mode === 'quick' ? 12 : 7;
+    const tick = mode === 'quick' ? 160 : 220;
 
-<div class="footer">Sentinela • Painel de segurança — Desenvolvido por Pablo & José</div>
+    scanTimer = setInterval(()=>{
+      progress += rand(stepMin, stepMax);
+      if(progress > 100) progress = 100;
+      setProgress(progress);
 
-  </div>  <script>  
-(function(){  
-  // utils  
-  const rand = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;  
-  const $ = id => document.getElementById(id);  
-  
-  const radar = $('radar'), startBtn = $('startBtn'), stopBtn = $('stopBtn'), resetBtn = $('resetBtn');  
-  const progressFill = $('progressFill'), progressCenter = $('progressCenter'), percentLabel = $('percentLabel');  
-  const deviceCount = $('deviceCount'), netSpeed = $('netSpeed'), threatCount = $('threatCount');  
-  const resultList = $('resultList'), logsContainer = $('logsContainer');  
-  const cpuVal = $('cpuVal'), ramVal = $('ramVal'), connVal = $('connVal'), ipVal = $('ipVal');  
-  const btnQuick = $('btnQuick'), btnFull = $('btnFull'), btnToggleDetail = $('btnToggleDetail');  
-  const toolQuick = $('toolQuick'), toolFull = $('toolFull'), toolAlert = $('toolAlert'), toolExport = $('toolExport');  
-  const liveSwitch = $('liveSwitch') || null, liveKnob = $('liveKnob') || null;  
-  
-  let scanning = false, progress = 0, scanTimer = null, currentMode = 'manual';  
-  
-  const virusBank = [  
-    {nome:'Trojan.Win32',nivel:'detected'},  
-    {nome:'Adware.Generic',nivel:'warning'},  
-    {nome:'Spyware.Keylogger',nivel:'detected'},  
-    {nome:'Worm.Autorun',nivel:'warning'},  
-    {nome:'Rootkit.Hidden',nivel:'detected'},  
-    {nome:'Backdoor.Dark',nivel:'detected'},  
-    {nome:'Malware.Ransom',nivel:'detected'},  
-    {nome:'Phishing.Attempt',nivel:'warning'},  
-    {nome:'Hijacker.Browser',nivel:'warning'},  
-    {nome:'Botnet.Agent',nivel:'detected'},  
-    {nome:'Safe.Update',nivel:'safe'},  
-    {nome:'Cleaner.Temp',nivel:'safe'}  
-  ];  
-  
-  function pushLog(msg){  
-    const t = new Date().toLocaleTimeString();  
-    const div = document.createElement('div');  
-    div.className = 'log-line';  
-    div.textContent = `[${t}] ${msg}`;  
-    logsContainer.prepend(div);  
-    if(logsContainer.childElementCount > 400) logsContainer.removeChild(logsContainer.lastChild);  
-  }  
-  
-  function spawnBlip(){  
-    const node = document.createElement('div');  
-    node.className = 'blip';  
-    const x = rand(20,300), y = rand(20,300), size = rand(6,14);  
-    node.style.left = x + 'px'; node.style.top = y + 'px';  
-    node.style.width = size + 'px'; node.style.height = size + 'px';  
-    radar.appendChild(node);  
-    setTimeout(()=> node.style.opacity = 1, 40);  
-    setTimeout(()=> { node.style.transition='opacity 1.2s'; node.style.opacity = 0; setTimeout(()=> node.remove(),1200); }, 2200 + rand(0,1400));  
-  }  
-  
-  function pickViruses(){  
-    const copy = [...virusBank]; const out = [];  
-    for(let i=0;i<4;i++){ const idx = rand(0, copy.length-1); out.push(copy.splice(idx,1)[0]); }  
-    return out;  
-  }  
-  
-  function showResults(){  
-    resultList.innerHTML = '';  
-    const chosen = pickViruses(); let detected = 0;  
-    chosen.forEach(v=>{  
-      const li = document.createElement('li');  
-      li.className = 'result-item ' + (v.nivel === 'safe' ? 'safe' : (v.nivel === 'warning' ? 'warning' : 'detected'));  
-      li.innerHTML = `<div>${v.nome}</div><div style="opacity:.9">${v.nivel.toUpperCase()}</div>`;  
-      resultList.appendChild(li);  
-      if(v.nivel === 'detected') detected++;  
-    });  
-    threatCount.textContent = detected;  
-    pushLog('Resultados: ' + chosen.map(s=>s.nome+'('+s.nivel+')').join(', '));  
-  }  
-  
-  function updateIndicators(){  
-    cpuVal.textContent = rand(5,70) + '%';  
-    ramVal.textContent = rand(18,88) + '%';  
-    connVal.textContent = rand(1,120);  
-    ipVal.textContent = `192.168.${rand(0,10)}.${rand(2,254)}`;  
-  }  
-  setInterval(updateIndicators, 2500);  
-  
-  function setProgress(p){  
-    progressFill.style.width = p + '%';  
-    progressCenter.textContent = p + '%';  
-    percentLabel.textContent = p + '%';  
-  }  
-  
-  function startScan(mode='quick'){  
-    if(scanning) return;  
-    scanning = true; currentMode = mode; progress = 0;  
-    resultList.innerHTML = ''; threatCount.textContent = 0;  
-    deviceCount.textContent = rand(6,28);  
-    netSpeed.textContent = (100 + rand(0,420)) + ' Mbps';  
-    pushLog(`Iniciando varredura (${mode === 'quick' ? 'Rápida' : 'Completa'})`);  
-    $('statusLabel').textContent = 'Executando';  
-  
-    for(let i=0;i<5;i++) setTimeout(spawnBlip, i*260);  
-  
-    const stepMin = mode === 'quick' ? 6 : 3;  
-    const stepMax = mode === 'quick' ? 12 : 7;  
-    const tick = mode === 'quick' ? 160 : 220;  
-  
-    scanTimer = setInterval(()=>{  
-      progress += rand(stepMin, stepMax);  
-      if(progress > 100) progress = 100;  
-      setProgress(progress);  
-  
-      if(rand(0,100) > 78) spawnBlip();  
-      if(rand(0,100) > 82) pushLog('Analisando pacote #' + rand(1000,9999));  
-  
-      if(progress >= 35 && resultList.childElementCount === 0){  
-        const half = pickViruses().slice(0,2);  
-        half.forEach(v=>{  
-          const li = document.createElement('li');  
-          li.className = 'result-item ' + (v.nivel === 'safe' ? 'safe' : (v.nivel === 'warning' ? 'warning' : 'detected'));  
-          li.innerHTML = `<div>${v.nome}</div><div style="opacity:.9">${v.nivel.toUpperCase()}</div>`;  
-          resultList.appendChild(li);  
-        });  
-      }  
-  
-      if(progress >= 100){  
-        clearInterval(scanTimer);  
-        scanning = false;  
-        $('statusLabel').textContent = 'Concluído';  
-        pushLog('Varredura concluída');  
-        setTimeout(()=> showResults(), 220);  
-      }  
-    }, tick);  
-  }  
-  
-  function stopScan(){  
-    if(!scanning) return;  
-    clearInterval(scanTimer);  
-    scanning = false;  
-    $('statusLabel').textContent = 'Interrompido';  
-    pushLog('Verificação interrompida');  
-  }  
-  
-  function resetScan(){  
-    clearInterval(scanTimer);  
-    scanning = false;  
-    progress = 0;  
-    setProgress(0);  
-    resultList.innerHTML = '';  
-    pushLog('Estado reiniciado');  
-    $('statusLabel').textContent = 'Pronto';  
-    threatCount.textContent = 0;  
-    deviceCount.textContent = 0;  
-    netSpeed.textContent = '0 Mbps';  
-  }  
-  
-  startBtn.addEventListener('click', ()=> startScan('quick'));  
-  stopBtn.addEventListener('click', stopScan);  
-  resetBtn.addEventListener('click', resetScan);  
-  
-  btnQuick.addEventListener('click', ()=> startScan('quick'));  
-  btnFull.addEventListener('click', ()=> startScan('full'));  
-  
-  toolQuick.addEventListener('click', ()=> startScan('quick'));  
-  toolFull.addEventListener('click', ()=> startScan('full'));  
-  toolAlert.addEventListener('click', ()=> {  
-    pushLog('ALERTA SIMULADO: tráfego anômalo detectado!');  
-    spawnBlip();  
-    const li = document.createElement('li');  
-    li.className = 'result-item warning';  
-    li.innerHTML = `<div>Simulated.Alert</div><div>ALERTA</div>`;  
-    resultList.prepend(li);  
-    setTimeout(()=> li.remove(), 5000);  
-  });  
-  toolExport.addEventListener('click', ()=>{  
-    pushLog('Exportando relatório...');  
-    const report = `Relatório Sentinela\nData: ${new Date().toLocaleString()}\nStatus: ${$('statusLabel').textContent}\nAmeaças: ${threatCount.textContent}\n`;  
-    const blob = new Blob([report], {type:'text/plain'});  
-    const url = URL.createObjectURL(blob);  
-    const a = document.createElement('a'); a.href = url; a.download = 'sentinela_report.txt'; a.click(); URL.revokeObjectURL(url);  
-  });  
-  
-  btnToggleDetail.addEventListener('click', ()=>{  
-    const btn = btnToggleDetail;  
-    const isShown = btn.dataset.shown === '1';  
-    if(isShown){  
-      btn.textContent = 'Mostrar Detalhes';  
-      btn.dataset.shown = '0';  
-      $('statusLabel').textContent = scanning ? 'Executando' : 'Pronto';  
-    } else {  
-      btn.textContent = 'Ocultar Detalhes';  
-      btn.dataset.shown = '1';  
-      pushLog('Modo Detalhado ativado');  
-      $('statusLabel').textContent = 'Modo Detalhado';  
-      setTimeout(()=> { if(!scanning) $('statusLabel').textContent = 'P
+      if(rand(0,100) > 70) spawnBlip();
+      if(rand(0,100) > 82) pushLog('Analisando pacote #' + rand(1000,9999));
+
+      if(progress >= 25 && resultList.childElementCount === 0){
+        const half = pickViruses().slice(0,2);
+        half.forEach(v=>{
+          const li = document.createElement('li');
+          li.className = 'result-item ' + (v.nivel === 'safe' ? 'safe' : (v.nivel === 'warning' ? 'warning' : 'detected'));
+          li.innerHTML = `<div>${v.nome}</div><div style="opacity:.9">${v.nivel.toUpperCase()}</div>`;
+          resultList.appendChild(li);
+        });
+      }
+
+      if(progress >= 100){
+        clearInterval(scanTimer);
+        scanning = false;
+        $('statusLabel').textContent = 'Concluído';
+        pushLog('Varredura concluída');
+        setTimeout(()=> showResults(), 220);
+      }
+    }, tick);
+  }
+
+  function stopScan(){
+    if(!scanning) return;
+    clearInterval(scanTimer);
+    scanning = false;
+    $('statusLabel').textContent = 'Interrompido';
+    pushLog('Verificação interrompida');
+  }
+
+  function resetScan(){
+    clearInterval(scanTimer);
+    scanning = false;
+    progress = 0;
+    setProgress(0);
+    resultList.innerHTML = '';
+    pushLog('Estado reiniciado');
+    $('statusLabel').textContent = 'Pronto';
+    threatCount.textContent = 0;
+    deviceCount.textContent = 0;
+    netSpeed.textContent = '0 Mbps';
+  }
+
+  // Toggle live monitoring knob
+  if(liveKnob){
+    liveKnob.parentElement.addEventListener('click', ()=>{
+      liveMode = !liveMode;
+      liveKnob.style.transform = liveMode ? 'translateX(22px)' : 'translateX(0)';
+      pushLog(liveMode ? 'Monitoramento em tempo real ativado' : 'Monitoramento em tempo real desativado');
+    });
+  }
+
+  // Wire controls
+  startBtn.addEventListener('click', ()=> startScan('quick'));
+  stopBtn.addEventListener('click', stopScan);
+  resetBtn.addEventListener('click', resetScan);
+  btnQuick.addEventListener('click', ()=> startScan('quick'));
+  btnFull.addEventListener('click', ()=> startScan('full'));
+  toolQuick.addEventListener('click', ()=> startScan('quick'));
+  toolFull.addEventListener('click', ()=> startScan('full'));
+
+  toolAlert.addEventListener('click', ()=>{
+    pushLog('⚠️ ALERTA SIMULADO: tráfego anômalo detectado!');
+    spawnBlip();
+    const li = document.createElement('li');
+    li.className = 'result-item warning';
+    li.innerHTML = `<div>Simulated.Alert</div><div>ALERTA</div>`;
+    resultList.prepend(li);
+    setTimeout(()=> li.remove(), 5000);
+  });
+
+  toolExport.addEventListener('click', ()=>{
+    pushLog('Exportando relatório...');
+    const report = `Relatório Sentinela\nData: ${new Date().toLocaleString()}\nStatus: ${$('statusLabel').textContent}\nAmeaças: ${threatCount.textContent}\n`;
+    const blob = new Blob([report], {type:'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'sentinela_report.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  btnToggleDetail.addEventListener('click', ()=>{
+    const btn = btnToggleDetail;
+    const isShown = btn.dataset.shown === '1';
+    if(isShown){
+      btn.textContent = 'Mostrar Detalhes';
+      btn.dataset.shown = '0';
+      $('statusLabel').textContent = scanning ? 'Executando' : 'Pronto';
+    } else {
+      btn.textContent = 'Ocultar Detalhes';
+      btn.dataset.shown = '1';
+      pushLog('Modo Detalhado ativado');
+      $('statusLabel').textContent = 'Modo Detalhado';
+      setTimeout(()=> { if(!scanning) $('statusLabel').textContent = 'Pronto'; }, 3500);
+    }
+  });
+
+  // Keep radar size updated when resizing (so blips spawn inside bounds correctly)
+  window.addEventListener('resize', ()=>{ /* no-op, but ensures clientWidth updated when spawning */ });
+
+  // start small animation on load
+  setTimeout(()=> {
+    pushLog('Sentinela pronto');
+    $('statusLabel').textContent = 'Pronto';
+  }, 220);
+
+})();
+</script>
+</body>
+</html>

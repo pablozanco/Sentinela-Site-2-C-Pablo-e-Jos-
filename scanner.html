@@ -469,10 +469,7 @@ header{
     }
   });
 
-  // Keep radar size updated when resizing (so blips spawn inside bounds correctly)
   window.addEventListener('resize', ()=>{ /* no-op, but ensures clientWidth updated when spawning */ });
-
-  // start small animation on load
   setTimeout(()=> {
     pushLog('Sentinela pronto');
     $('statusLabel').textContent = 'Pronto';
